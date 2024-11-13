@@ -1,0 +1,423 @@
+{
+  "curve": {
+    "spline": "NURBS",
+    "direction": "path",
+    "bevres": 4,
+    "ures": 4,
+    "smooth": 0.0,
+    "cyclic": true,
+    "fillcaps": true,
+    "endpoints": true,
+    "bevdep": 0.25,
+    "pntrad": 1.0
+  },
+  "path": {
+    "provider": "ellipse",
+    "res_lin": 12,
+    "res_wav": 12,
+    "res_arc": 12,
+    "res_ell": 16,
+    "res_pol": 12,
+    "res_hel": 24,
+    "res_spi": 24,
+    "res_tor": 36,
+    "pathed": {
+      "npts": 16,
+      "user_dim": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "user_piv": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "upv": [],
+      "cust_dim": [
+        8.0,
+        8.0,
+        8.0
+      ],
+      "lin_dim": 8.0,
+      "lin_ease": "LINEAR",
+      "lin_exp": 1.0,
+      "wav_dim": 8.0,
+      "wav_amp": 0.5,
+      "wav_frq": 1.0,
+      "wav_pha": 0.0,
+      "arc_dim": 8.0,
+      "arc_fac": 4.0,
+      "arc_off": 0.0,
+      "ell_dim": [
+        12.0,
+        12.0
+      ],
+      "pol_dim": [
+        8.0,
+        8.0
+      ],
+      "pol_sid": 3,
+      "pol_coff": 0.0,
+      "pol_cres": 0,
+      "pol_ang": 0.0,
+      "pol_ease": "LINEAR",
+      "pol_exp": 1.0,
+      "hel_dim": [
+        8.0,
+        8.0
+      ],
+      "hel_len": 8.0,
+      "hel_stp": 2.0,
+      "hel_fac": 1.0,
+      "hel_pha": 0.0,
+      "hel_invert": false,
+      "hel_hlrp": false,
+      "hel_exp": 2.0,
+      "hel_mir": false,
+      "hel_ease": "LINEAR",
+      "spi_dim": 8.0,
+      "spi_revs": 1.0,
+      "tor_dim": [
+        8.0,
+        2.0
+      ],
+      "tor_stp": 4.0,
+      "tor_pha": 0.0,
+      "closed": true
+    },
+    "ani_dim": false,
+    "ani_dim_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_lin_dim": 8.0,
+    "ani_wav_dim": 8.0,
+    "ani_arc_dim": 8.0,
+    "ani_spi_dim": 8.0,
+    "ani_dim_2d": [
+      8.0,
+      8.0
+    ],
+    "ani_dim_3d": [
+      8.0,
+      8.0,
+      8.0
+    ],
+    "ani_fac": false,
+    "ani_fac_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_fac2": false,
+    "ani_fac2_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_fac3": false,
+    "ani_fac3_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_fac4": false,
+    "ani_fac4_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_lin_exp": 1.0,
+    "ani_wav_amp": 0.5,
+    "ani_wav_frq": 1.0,
+    "ani_wav_pha": 0.0,
+    "ani_arc_fac": 2.0,
+    "ani_hel_len": 8.0,
+    "ani_hel_fac": 1.0,
+    "ani_hel_stp": 2.0,
+    "ani_hel_pha": 0.0,
+    "ani_spi_revs": 1.0,
+    "ani_tor_stp": 2.0,
+    "ani_tor_pha": 0.0
+  },
+  "path_att": {
+    "active": true,
+    "track": "Z",
+    "upfixed": false,
+    "up": "X"
+  },
+  "prof": {
+    "provider": "ellipse",
+    "res_lin": 12,
+    "res_wav": 12,
+    "res_arc": 12,
+    "res_ell": 12,
+    "res_pol": 12,
+    "profed": {
+      "npts": 12,
+      "user_dim": [
+        0.0,
+        0.0
+      ],
+      "user_piv": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "upv": [],
+      "cust_dim": [
+        2.0,
+        2.0
+      ],
+      "lin_dim": 3.8299999237060547,
+      "lin_ease": "LINEAR",
+      "lin_exp": 1.0,
+      "wav_dim": 4.460000038146973,
+      "wav_amp": 0.5,
+      "wav_frq": 1.0,
+      "wav_pha": 0.0,
+      "arc_dim": 4.939999580383301,
+      "arc_fac": 2.1999998092651367,
+      "arc_off": 0.0,
+      "ell_dim": [
+        4.0,
+        4.0
+      ],
+      "pol_dim": [
+        3.0,
+        3.0
+      ],
+      "pol_sid": 3,
+      "pol_coff": 0.0,
+      "pol_cres": 0,
+      "pol_ang": 0.0,
+      "pol_ease": "LINEAR",
+      "pol_exp": 1.0,
+      "idx": 0,
+      "rot_align": 0.0
+    },
+    "ani_dim": false,
+    "ani_dim_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_lin_dim": 2.0,
+    "ani_wav_dim": 2.0,
+    "ani_arc_dim": 2.0,
+    "ani_epc_dim": [
+      2.0,
+      2.0
+    ],
+    "ani_fac": false,
+    "ani_fac_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_fac2": false,
+    "ani_fac2_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_fac3": false,
+    "ani_fac3_mirror": {
+      "active": false,
+      "cycles": 1
+    },
+    "ani_lin_exp": 1.0,
+    "ani_wav_amp": 0.5,
+    "ani_wav_frq": 1.0,
+    "ani_wav_pha": 0.0,
+    "ani_arc_fac": 1.0
+  },
+  "noiz": {
+    "active": false,
+    "ampli": 0.0,
+    "vfac": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "nseed": 0,
+    "ani_noiz": false,
+    "ani_seed": false,
+    "ani_blin": 1,
+    "ani_blout": 1,
+    "ani_stp": 1
+  },
+  "rngs": {
+    "active": false,
+    "invert": false,
+    "rndsel": false,
+    "rbeg": 0,
+    "ritm": 1,
+    "rgap": 0,
+    "rstp": 1,
+    "nseed": 0
+  },
+  "blnd": [],
+  "pathloc": [],
+  "pathrot": [],
+  "profloc": [
+    {
+      "name": "Location",
+      "active": true,
+      "fac": 5.0,
+      "axis": [
+        -1.0,
+        0.0,
+        0.5
+      ],
+      "absboo": true,
+      "bbrot": true,
+      "nprams": {
+        "npts": 16,
+        "ease": "OFF",
+        "exp": 1.0,
+        "cyc": false,
+        "mir": false,
+        "rev": false,
+        "reflect": "0",
+        "idx": 0,
+        "itm": 16,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 1.0,
+        "rndseed": 0,
+        "rndshuff": false
+      },
+      "iprams": {
+        "npts": 12,
+        "ease": "OFF",
+        "exp": 1.0,
+        "cyc": false,
+        "mir": false,
+        "rev": false,
+        "reflect": "0",
+        "idx": 0,
+        "itm": 12,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 1.0,
+        "rndseed": 0,
+        "rndshuff": false
+      },
+      "ani_nidx": {
+        "active": false,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": 0,
+        "beg": 1,
+        "stp": 1
+      },
+      "ani_idx": {
+        "active": false,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": 0,
+        "beg": 1,
+        "stp": 1
+      },
+      "ani_fac": {
+        "active": false,
+        "fac": 0.0,
+        "mirror": {
+          "active": false,
+          "cycles": 1
+        }
+      }
+    }
+  ],
+  "profrot": [
+    {
+      "name": "Rotation",
+      "active": true,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "angle": 2.094395160675049,
+      "pivot": [
+        6.0,
+        0.0,
+        -6.0
+      ],
+      "nprams": {
+        "npts": 16,
+        "ease": "OFF",
+        "exp": 2.0,
+        "cyc": false,
+        "mir": false,
+        "rev": false,
+        "reflect": "0",
+        "idx": 0,
+        "itm": 16,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 1.0,
+        "rndseed": 0,
+        "rndshuff": false
+      },
+      "iprams": {
+        "npts": 12,
+        "ease": "IN-OUT",
+        "exp": 1.0,
+        "cyc": false,
+        "mir": false,
+        "rev": false,
+        "reflect": "0",
+        "idx": 0,
+        "itm": 12,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 1.0,
+        "rndseed": 0,
+        "rndshuff": false
+      },
+      "ani_rot": {
+        "ani_ang": false,
+        "angle": 0.0,
+        "beg": 1,
+        "end": 1,
+        "lerp": true
+      },
+      "ani_nidx": {
+        "active": false,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": 0,
+        "beg": 1,
+        "stp": 1
+      },
+      "ani_idx": {
+        "active": true,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": -1,
+        "beg": 1,
+        "stp": 1
+      }
+    }
+  ],
+  "culoc": [],
+  "curot": [],
+  "cudep": [],
+  "pnrad": [],
+  "use_profile": true,
+  "setcoll_name": "profrots_02",
+  "ncus": 12,
+  "cpts": 16,
+  "ani_kf_type": "1",
+  "ani_kf_start": 1,
+  "ani_kf_step": 1,
+  "ani_kf_loop": 49
+}
