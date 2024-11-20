@@ -1276,7 +1276,7 @@ class PTDBLNPOPC_pathrot(bpy.types.PropertyGroup):
     axis: bpy.props.FloatVectorProperty(size=3, default=(0, 0, 1))
     angle: bpy.props.FloatProperty(default=0, subtype="ANGLE")
     bbatt: bpy.props.StringProperty(default="after")
-    blocs: bpy.props.BoolProperty(default=False)
+    brots: bpy.props.BoolProperty(default=False)
     pivot: bpy.props.FloatVectorProperty(size=3, default=(0, 0, 0))
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
     tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
@@ -1291,7 +1291,7 @@ class PTDBLNPOPC_pathrot(bpy.types.PropertyGroup):
             "axis": self.axis,
             "angle": self.angle,
             "bbatt": self.bbatt,
-            "blocs": self.blocs,
+            "brots": self.brots,
             "pivot": self.pivot,
         }
         d["nprams"] = self.nprams.to_dct()
@@ -2365,10 +2365,8 @@ class PTDBLNPOPC_OT_pathrot_edit(bpy.types.Operator):
         ),
         default="after",
     )
-    blocs: bpy.props.BoolProperty(
-        name="affect locs",
-        description="rotate path locations",
-        default=False,
+    brots: bpy.props.BoolProperty(
+        name="rotate path", description="rotate path locations", default=False
     )
     pivot: bpy.props.FloatVectorProperty(
         name="pivot", size=3, default=(0, 0, 0), description="rotation pivot"
@@ -2393,7 +2391,7 @@ class PTDBLNPOPC_OT_pathrot_edit(bpy.types.Operator):
         self.axis = item.axis
         self.angle = item.angle
         self.bbatt = item.bbatt
-        self.blocs = item.blocs
+        self.brots = item.brots
         self.pivot = item.pivot
         self.copy_from_pg(item)
         return self.execute(context)
@@ -2406,7 +2404,7 @@ class PTDBLNPOPC_OT_pathrot_edit(bpy.types.Operator):
         item.axis = self.axis
         item.angle = self.angle
         item.bbatt = self.bbatt
-        item.blocs = self.blocs
+        item.brots = self.brots
         item.pivot = self.pivot
         self.copy_to_pg(item)
         try:
@@ -2429,7 +2427,7 @@ class PTDBLNPOPC_OT_pathrot_edit(bpy.types.Operator):
         sc = s.column(align=True)
         carr = self.use_profile
         if carr:
-            names = ("Axis", "Angle", "Order", "Locs", "Pivot")
+            names = ("Axis", "Angle", "Order", "Effect", "Pivot")
         else:
             names = ("Axis", "Angle", "Pivot")
         for n in names:
@@ -2445,9 +2443,9 @@ class PTDBLNPOPC_OT_pathrot_edit(bpy.types.Operator):
             row.enabled = self.pathatt_active
             row.prop(self, "bbatt", text="")
             row = sc.row(align=True)
-            row.prop(self, "blocs", text="rotate path", toggle=True)
+            row.prop(self, "brots", toggle=True)
         row = sc.row(align=True)
-        row.enabled = self.blocs if carr else True
+        row.enabled = self.brots if carr else True
         row.prop(self, "pivot", text="")
 
 

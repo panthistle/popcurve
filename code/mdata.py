@@ -254,8 +254,8 @@ class PopEx:
         self._pathed_raxes.append(axis)
         self._pathed_rpivs.append(Vector(dct["pivot"]))
         bbatt = dct["bbatt"] if self._profile and self._pathori else "before"
-        blocs = dct["blocs"] if self._profile else True
-        self._pathed_ropts.append([bbatt, blocs])
+        brots = dct["brots"] if self._profile else True
+        self._pathed_ropts.append([bbatt, brots])
         fls = self._pathedrot_get(dct["nprams"])
         angle = dct["angle"]
         self._pathedrots.append([Quaternion(axis, angle * f) for f in fls])
