@@ -498,12 +498,13 @@ def aniact_collang_list(inst, loop):
 
 
 def aniact_edrots_dict_onedim(coll, loop):
-    d = {"dcts": [], "angs": [], "use_facs": [], "nids": [], "lids": []}
+    d = {"dcts": [], "b_angs": [], "angs": [], "use_facs": [], "nids": [], "lids": []}
     tmpid = 0
     for item in coll:
         if item.active:
             if item.anim_state():
                 d["dcts"].append(item.to_dct())
+                d["b_angs"].append(item.ani_rot.ani_ang)
                 d["angs"].append(aniact_collang_list(item, loop))
                 d["use_facs"].append(item.ani_rot.lerp)
                 d["nids"].append(
@@ -515,12 +516,14 @@ def aniact_edrots_dict_onedim(coll, loop):
 
 
 def aniact_edrots_dict_twodim(coll, loop):
-    d = {"dcts": [], "angs": [], "use_facs": [], "ids": [], "nids": [], "lids": []}
+    d = {"dcts": [], "b_angs": [], "angs": [], "use_facs": []}
+    d.update({"ids": [], "nids": [], "lids": []})
     tmpid = 0
     for item in coll:
         if item.active:
             if item.anim_state():
                 d["dcts"].append(item.to_dct())
+                d["b_angs"].append(item.ani_rot.ani_ang)
                 d["angs"].append(aniact_collang_list(item, loop))
                 d["use_facs"].append(item.ani_rot.lerp)
                 d["ids"].append(

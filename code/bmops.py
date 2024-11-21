@@ -1860,15 +1860,16 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
                         dct["nprams"]["idx"] = nids[i]
                         dct["fac"] = ams[i]
                         pop.pathedloc_anim_data(dct, lid)
-                    for dct, angs, use_fac, nids, lid in zip(
+                    for dct, bang, angs, ufac, nids, lid in zip(
                         pathrot_d["dcts"],
+                        pathrot_d["b_angs"],
                         pathrot_d["angs"],
                         pathrot_d["use_facs"],
                         pathrot_d["nids"],
                         pathrot_d["lids"],
                     ):
                         dct["nprams"]["idx"] = nids[i]
-                        pop.pathedrot_anim_data(dct, angs[i], use_fac, lid)
+                        pop.pathedrot_anim_data(dct, bang, angs[i], ufac, lid)
                     if use_profile:
                         if prof_flag:
                             pop.prof_anim_update(*(v[i] for v in prof_d.values()))
@@ -1894,8 +1895,9 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
                             dct["nprams"]["idx"] = nids[i]
                             dct["fac"] = ams[i]
                             pop.profedloc_anim_data(dct, lid)
-                        for dct, angs, use_fac, ids, nids, lid in zip(
+                        for dct, bang, angs, ufac, ids, nids, lid in zip(
                             profrot_d["dcts"],
+                            profrot_d["b_angs"],
                             profrot_d["angs"],
                             profrot_d["use_facs"],
                             profrot_d["ids"],
@@ -1904,7 +1906,7 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
                         ):
                             dct["iprams"]["idx"] = ids[i]
                             dct["nprams"]["idx"] = nids[i]
-                            pop.profedrot_anim_data(dct, angs[i], use_fac, lid)
+                            pop.profedrot_anim_data(dct, bang, angs[i], ufac, lid)
                         pop.compile_pop_data()
                         for dct, ids, nids, ams, lid in zip(
                             culoc_d["dcts"],
@@ -1917,8 +1919,9 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
                             dct["iprams"]["idx"] = ids[i]
                             dct["fac"] = ams[i]
                             pop.curvedloc_anim_data(dct, lid)
-                        for dct, angs, use_fac, ids, nids, lid in zip(
+                        for dct, bang, angs, ufac, ids, nids, lid in zip(
                             curot_d["dcts"],
+                            curot_d["b_angs"],
                             curot_d["angs"],
                             curot_d["use_facs"],
                             curot_d["ids"],
@@ -1927,7 +1930,7 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
                         ):
                             dct["iprams"]["idx"] = ids[i]
                             dct["nprams"]["idx"] = nids[i]
-                            pop.curvedrot_anim_data(dct, angs[i], use_fac, lid)
+                            pop.curvedrot_anim_data(dct, bang, angs[i], ufac, lid)
                     locs = pop.get_pntlocs()
                     if noiz.active:
                         locs = ModPOPC.noiz_locs(

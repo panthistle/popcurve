@@ -656,17 +656,17 @@ class PopEx:
             return
         self._pathedlocs[idx] = self._pathedloc_get(locs, dct)
 
-    def pathedrot_anim_data(self, dct, ani_ang, use_facs, idx):
-        if ani_ang or use_facs:
+    def pathedrot_anim_data(self, dct, bang, angle, use_facs, idx):
+        if bang or use_facs:
             rots = self._pathedrots[idx]
             axis = self._pathed_raxes[idx]
             if not use_facs:
-                self._pathedrots[idx] = [r @ Quaternion(axis, ani_ang) for r in rots]
+                self._pathedrots[idx] = [r @ Quaternion(axis, angle) for r in rots]
                 return
             fls = self._pathedrot_get(dct["nprams"])
-            if ani_ang:
+            if bang:
                 self._pathedrots[idx] = [
-                    r @ Quaternion(axis, f * ani_ang) for r, f in zip(rots, fls)
+                    r @ Quaternion(axis, f * angle) for r, f in zip(rots, fls)
                 ]
                 return
             angle = dct["angle"]
@@ -686,19 +686,19 @@ class PopEx:
             return
         self._profedlocs[idx] = self._blndedloc_get(locs, dct)
 
-    def profedrot_anim_data(self, dct, ani_ang, use_facs, idx):
-        if ani_ang or use_facs:
+    def profedrot_anim_data(self, dct, bang, angle, use_facs, idx):
+        if bang or use_facs:
             rots = self._profedrots[idx]
             axis = self._profed_raxes[idx]
             if not use_facs:
                 self._profedrots[idx] = [
-                    [r @ Quaternion(axis, ani_ang) for r in rls] for rls in rots
+                    [r @ Quaternion(axis, angle) for r in rls] for rls in rots
                 ]
                 return
             lst = self._profedrot_get(dct["nprams"], dct["iprams"])
-            if ani_ang:
+            if bang:
                 self._profedrots[idx] = [
-                    [r @ Quaternion(axis, f * ani_ang) for r, f in zip(rls, fls)]
+                    [r @ Quaternion(axis, f * angle) for r, f in zip(rls, fls)]
                     for rls, fls in zip(rots, lst)
                 ]
                 return
@@ -714,18 +714,18 @@ class PopEx:
             return
         self._curvedlocs[idx] = self._curvedloc_get(locs, dct)
 
-    def _curvedrot_global_anim_data(self, dct, ani_ang, use_facs, idx):
+    def _curvedrot_global_anim_data(self, dct, bang, angle, use_facs, idx):
         rots = self._curvedrots[idx]
         axis = self._curved_raxes[idx]
         if not use_facs:
             self._curvedrots[idx] = [
-                [r @ Quaternion(axis, ani_ang) for r in rls] for rls in rots
+                [r @ Quaternion(axis, angle) for r in rls] for rls in rots
             ]
             return
         lst = self._curvedrot_get(dct["nprams"], dct["iprams"])
-        if ani_ang:
+        if bang:
             self._curvedrots[idx] = [
-                [r @ Quaternion(axis, f * ani_ang) for r, f in zip(rls, fls)]
+                [r @ Quaternion(axis, f * angle) for r, f in zip(rls, fls)]
                 for rls, fls in zip(rots, lst)
             ]
             return
@@ -734,24 +734,24 @@ class PopEx:
             [Quaternion(axis, f * angle) for f in fls] for fls in lst
         ]
 
-    def curvedrot_anim_data(self, dct, ani_ang, use_facs, idx):
-        if ani_ang or use_facs:
+    def curvedrot_anim_data(self, dct, bang, angle, use_facs, idx):
+        if bang or use_facs:
             if dct["globoo"] or not self._poprots:
-                self._curvedrot_global_anim_data(dct, ani_ang, use_facs, idx)
+                self._curvedrot_global_anim_data(dct, bang, angle, use_facs, idx)
                 return
             rots = self._curvedrots[idx]
             axis = self._curved_raxes[idx]
             if not use_facs:
                 self._curvedrots[idx] = [
-                    [r @ Quaternion(q @ axis, ani_ang) for r, q in zip(rls, qls)]
+                    [r @ Quaternion(q @ axis, angle) for r, q in zip(rls, qls)]
                     for rls, qls in zip(rots, self._poprots)
                 ]
                 return
             lst = self._curvedrot_get(dct["nprams"], dct["iprams"])
-            if ani_ang:
+            if bang:
                 self._curvedrots[idx] = [
                     [
-                        r @ Quaternion(q @ axis, f * ani_ang)
+                        r @ Quaternion(q @ axis, f * angle)
                         for r, q, f in zip(rls, qls, fls)
                     ]
                     for rls, qls, fls in zip(rots, self._poprots, lst)
