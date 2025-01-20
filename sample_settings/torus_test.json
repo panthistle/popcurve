@@ -4,13 +4,15 @@
     "direction": "path",
     "bevres": 4,
     "ures": 12,
-    "smoothtwist": 0.0,
-    "cyclic": true,
-    "bevdep": 0.25,
+    "smooth": 0.0,
+    "cyclic": false,
+    "fillcaps": true,
+    "endpoints": true,
+    "bevdep": 0.15000000596046448,
     "pntrad": 1.0
   },
   "path": {
-    "provider": "ellipse",
+    "provider": "torus",
     "res_lin": 12,
     "res_wav": 12,
     "res_arc": 12,
@@ -18,9 +20,9 @@
     "res_pol": 12,
     "res_hel": 24,
     "res_spi": 24,
-    "res_tor": 36,
+    "res_tor": 90,
     "pathed": {
-      "npts": 30,
+      "npts": 90,
       "user_dim": [
         0.0,
         0.0,
@@ -77,10 +79,10 @@
       "spi_dim": 8.0,
       "spi_revs": 1.0,
       "tor_dim": [
-        8.0,
-        2.0
+        12.0,
+        4.0
       ],
-      "tor_stp": 4.0,
+      "tor_stp": 16.0,
       "tor_pha": 0.0,
       "closed": true
     },
@@ -107,7 +109,7 @@
       "active": false,
       "cycles": 1
     },
-    "ani_fac2": false,
+    "ani_fac2": true,
     "ani_fac2_mirror": {
       "active": false,
       "cycles": 1
@@ -133,7 +135,7 @@
     "ani_hel_pha": 0.0,
     "ani_spi_revs": 1.0,
     "ani_tor_stp": 2.0,
-    "ani_tor_pha": 0.0
+    "ani_tor_pha": 6.2831854820251465
   },
   "path_att": {
     "active": true,
@@ -251,69 +253,7 @@
   },
   "blnd": [],
   "pathloc": [],
-  "pathrot": [
-    {
-      "name": "Rotation",
-      "active": true,
-      "axis": [
-        0.0,
-        0.0,
-        1.0
-      ],
-      "angle": 6.2831854820251465,
-      "bbatt": "before",
-      "blocs": false,
-      "pivot": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "nprams": {
-        "npts": 30,
-        "ease": "IN-OUT",
-        "exp": 1.0,
-        "cyc": true,
-        "mir": false,
-        "rev": false,
-        "reflect": "0",
-        "idx": 0,
-        "itm": 30,
-        "gap": 0,
-        "reps": 1,
-        "repfstp": 1,
-        "repfoff": 1.0,
-        "rnduse": false,
-        "rndval": 1.0,
-        "rndseed": 0,
-        "rndshuff": false
-      },
-      "ani_rot": {
-        "ani_ang": false,
-        "angle": 0.0,
-        "beg": 1,
-        "end": 1,
-        "lerp": false,
-        "ani_piv": false,
-        "pivot": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        }
-      },
-      "ani_nidx": {
-        "active": false,
-        "offrnd": false,
-        "offrndseed": 0,
-        "offset": 0,
-        "beg": 1,
-        "stp": 1
-      }
-    }
-  ],
+  "pathrot": [],
   "profloc": [
     {
       "name": "Location",
@@ -448,17 +388,7 @@
         "angle": 0.0,
         "beg": 1,
         "end": 1,
-        "lerp": false,
-        "ani_piv": false,
-        "pivot": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        }
+        "lerp": false
       },
       "ani_nidx": {
         "active": false,
@@ -482,12 +412,12 @@
   "curot": [],
   "cudep": [],
   "pnrad": [],
-  "use_profile": true,
+  "use_profile": false,
   "setcoll_name": "torus_test",
-  "ncus": 12,
-  "cpts": 30,
+  "ncus": 1,
+  "cpts": 90,
   "ani_kf_type": "1",
   "ani_kf_start": 1,
   "ani_kf_step": 10,
-  "ani_kf_loop": 5
+  "ani_kf_loop": 31
 }

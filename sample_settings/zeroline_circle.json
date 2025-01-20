@@ -4,8 +4,10 @@
     "direction": "prof",
     "bevres": 4,
     "ures": 12,
-    "smoothtwist": 0.0,
+    "smooth": 0.0,
     "cyclic": true,
+    "fillcaps": true,
+    "endpoints": true,
     "bevdep": 0.15000000596046448,
     "pntrad": 1.0
   },
@@ -420,8 +422,8 @@
         0.0
       ],
       "angle": 6.2831854820251465,
-      "bbatt": "before",
-      "blocs": true,
+      "bbatt": "after",
+      "brots": true,
       "pivot": [
         0.0,
         0.0,
@@ -451,17 +453,7 @@
         "angle": 0.0,
         "beg": 1,
         "end": 1,
-        "lerp": false,
-        "ani_piv": false,
-        "pivot": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        }
+        "lerp": false
       },
       "ani_nidx": {
         "active": false,

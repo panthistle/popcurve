@@ -4,8 +4,10 @@
     "direction": "path",
     "bevres": 4,
     "ures": 12,
-    "smoothtwist": 0.0,
+    "smooth": 0.0,
     "cyclic": true,
+    "fillcaps": true,
+    "endpoints": true,
     "bevdep": 0.25,
     "pntrad": 1.0
   },
@@ -254,15 +256,15 @@
   "pathrot": [
     {
       "name": "Rotation",
-      "active": true,
+      "active": false,
       "axis": [
         1.0,
         0.0,
         0.0
       ],
-      "angle": 0.0,
+      "angle": 2.706482410430908,
       "bbatt": "after",
-      "blocs": true,
+      "brots": false,
       "pivot": [
         0.0,
         0.0,
@@ -292,17 +294,7 @@
         "angle": 0.02617993950843811,
         "beg": 1,
         "end": 1,
-        "lerp": false,
-        "ani_piv": false,
-        "pivot": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        }
+        "lerp": false
       },
       "ani_nidx": {
         "active": false,
@@ -373,17 +365,7 @@
         "angle": 0.3141592741012573,
         "beg": 1,
         "end": 1,
-        "lerp": false,
-        "ani_piv": false,
-        "pivot": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        }
+        "lerp": false
       },
       "ani_nidx": {
         "active": false,
@@ -403,7 +385,81 @@
       }
     }
   ],
-  "culoc": [],
+  "culoc": [
+    {
+      "name": "Location",
+      "active": true,
+      "fac": -16.0,
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "globoo": true,
+      "nprams": {
+        "npts": 12,
+        "ease": "OFF",
+        "exp": 2.0,
+        "cyc": false,
+        "mir": false,
+        "rev": false,
+        "reflect": "0",
+        "idx": 0,
+        "itm": 12,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 1.0,
+        "rndseed": 0,
+        "rndshuff": false
+      },
+      "iprams": {
+        "npts": 12,
+        "ease": "OFF",
+        "exp": 2.0,
+        "cyc": false,
+        "mir": false,
+        "rev": false,
+        "reflect": "0",
+        "idx": 0,
+        "itm": 12,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 1.0,
+        "rndseed": 0,
+        "rndshuff": false
+      },
+      "ani_nidx": {
+        "active": false,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": 0,
+        "beg": 1,
+        "stp": 1
+      },
+      "ani_idx": {
+        "active": false,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": 0,
+        "beg": 1,
+        "stp": 1
+      },
+      "ani_fac": {
+        "active": false,
+        "fac": 0.0,
+        "mirror": {
+          "active": false,
+          "cycles": 1
+        }
+      }
+    }
+  ],
   "curot": [
     {
       "name": "Rotation",
@@ -463,17 +519,7 @@
         "angle": 0.3141592741012573,
         "beg": 1,
         "end": 1,
-        "lerp": true,
-        "ani_piv": false,
-        "pivot": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        }
+        "lerp": true
       },
       "ani_nidx": {
         "active": false,
