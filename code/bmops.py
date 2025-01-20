@@ -171,44 +171,22 @@ class PTDBLNPOPC_OT_batchcoll_toggle(bpy.types.Operator):
     bl_idname = "ptdblnpopc.batchcoll_toggle"
     bl_options = {"REGISTER", "INTERNAL", "UNDO"}
 
-    action: bpy.props.StringProperty(default="restore", options={"HIDDEN"})
+    action: bpy.props.StringProperty(default="disable", options={"HIDDEN"})
 
     @classmethod
     def description(cls, context, properties):
         act = getattr(properties, "action")
         if act == "disable":
             return "disable edits"
-        if act == "enable":
-            return "enable edits"
-        if act == "restore":
-            return "restore edits"
-        return "clear temporary flags"
+        return "enable edits"
 
     def disable_items(self, coll):
         for item in coll:
-            if item.active and not item.tmp_state.on:
-                item.tmp_state.off = True
-                item.active = False
+            item.active = False
 
     def enable_items(self, coll):
         for item in coll:
-            if not (item.active or item.tmp_state.off):
-                item.tmp_state.on = True
-                item.active = True
-
-    def restore_items(self, coll):
-        for item in coll:
-            if item.tmp_state.on:
-                item.active = False
-            elif item.tmp_state.off:
-                item.active = True
-            item.tmp_state.on = False
-            item.tmp_state.off = False
-
-    def clear_temp_flags(self, coll):
-        for item in coll:
-            item.tmp_state.on = False
-            item.tmp_state.off = False
+            item.active = True
 
     def execute(self, context):
         scene = context.scene
@@ -217,18 +195,6 @@ class PTDBLNPOPC_OT_batchcoll_toggle(bpy.types.Operator):
         b_ops = pool.batchtoggle_ops
         act = self.action
         try:
-            if act == "cleartemps":
-                self.clear_temp_flags(pool.pathloc)
-                self.clear_temp_flags(pool.pathrot)
-                self.clear_temp_flags(pool.profloc)
-                self.clear_temp_flags(pool.profrot)
-                self.clear_temp_flags(pool.blnd)
-                self.clear_temp_flags(pool.culoc)
-                self.clear_temp_flags(pool.curot)
-                self.clear_temp_flags(pool.cudep)
-                self.clear_temp_flags(pool.pnrad)
-                pool.update_ok = True
-                return {"FINISHED"}
             if act == "disable":
                 if b_ops.path:
                     self.disable_items(pool.pathloc)
@@ -245,7 +211,7 @@ class PTDBLNPOPC_OT_batchcoll_toggle(bpy.types.Operator):
                         self.disable_items(pool.pnrad)
                 elif b_ops.curve:
                     self.disable_items(pool.pnrad)
-            elif act == "enable":
+            else:
                 if b_ops.path:
                     self.enable_items(pool.pathloc)
                     self.enable_items(pool.pathrot)
@@ -261,22 +227,6 @@ class PTDBLNPOPC_OT_batchcoll_toggle(bpy.types.Operator):
                         self.enable_items(pool.pnrad)
                 elif b_ops.curve:
                     self.enable_items(pool.pnrad)
-            else:
-                if b_ops.path:
-                    self.restore_items(pool.pathloc)
-                    self.restore_items(pool.pathrot)
-                if pool.use_profile:
-                    if b_ops.prof:
-                        self.restore_items(pool.profloc)
-                        self.restore_items(pool.profrot)
-                        self.restore_items(pool.blnd)
-                    if b_ops.curve:
-                        self.restore_items(pool.culoc)
-                        self.restore_items(pool.curot)
-                        self.restore_items(pool.cudep)
-                        self.restore_items(pool.pnrad)
-                elif b_ops.curve:
-                    self.restore_items(pool.pnrad)
             ModPOPC.scene_update(scene)
         except Exception as my_err:
             pool.update_ok = True
@@ -288,50 +238,22 @@ class PTDBLNPOPC_OT_batchcoll_toggle(bpy.types.Operator):
 
 
 class PTDBLNPOPC_OT_batchcoll_update(bpy.types.Operator):
-    bl_label = "Batch Collection Updates"
+    bl_label = "Update Collection Items"
     bl_idname = "ptdblnpopc.batchcoll_update"
+    bl_description = "basic update (only edits with all items in one group)"
     bl_options = {"REGISTER", "INTERNAL", "UNDO"}
 
-    doall: bpy.props.BoolProperty(default=False, options={"HIDDEN"})
-
-    @classmethod
-    def description(cls, context, properties):
-        if getattr(properties, "doall"):
-            return "extended update (all edits, match groups and gaps)"
-        return "basic update (only edits with all items in one group)"
-
-    def update_nodes(self, optall, coll, oldnodes, newnodes):
-        if not optall:
-            for item in coll:
-                if item.nprams.itm == oldnodes:
-                    item.nprams.itm = newnodes
-            return
+    def update_nodes(self, coll, oldnodes, newnodes):
         for item in coll:
-            itm = item.nprams.itm
-            if itm == oldnodes:
+            if item.nprams.itm == oldnodes:
                 item.nprams.itm = newnodes
-            elif itm < newnodes:
-                item.nprams.reps = newnodes // (itm + item.nprams.gap) + 1
 
-    def update_edits(self, optall, coll, oldnodes, newnodes, oldpoints, newpoints):
-        if not optall:
-            for item in coll:
-                if item.nprams.itm == oldnodes:
-                    item.nprams.itm = newnodes
-                if item.iprams.itm == oldpoints:
-                    item.iprams.itm = newpoints
-            return
+    def update_edits(self, coll, oldnodes, newnodes, oldpoints, newpoints):
         for item in coll:
-            itm = item.nprams.itm
-            if itm == oldnodes:
+            if item.nprams.itm == oldnodes:
                 item.nprams.itm = newnodes
-            elif itm < newnodes:
-                item.nprams.reps = newnodes // (itm + item.nprams.gap) + 1
-            itm = item.iprams.itm
-            if itm == oldpoints:
+            if item.iprams.itm == oldpoints:
                 item.iprams.itm = newpoints
-            elif itm < newpoints:
-                item.iprams.reps = newpoints // (itm + item.iprams.gap) + 1
 
     def execute(self, context):
         scene = context.scene
@@ -339,30 +261,29 @@ class PTDBLNPOPC_OT_batchcoll_update(bpy.types.Operator):
         pool.update_ok = False
         b_ops = pool.batchupdate_ops
         b_eds = b_ops.edits
-        all = self.doall
         try:
             ndn = pool.path.pathed.npts
             ndo = b_ops.nodes
             if b_eds.path:
-                self.update_nodes(all, pool.pathloc, ndo, ndn)
-                self.update_nodes(all, pool.pathrot, ndo, ndn)
+                self.update_nodes(pool.pathloc, ndo, ndn)
+                self.update_nodes(pool.pathrot, ndo, ndn)
             if pool.use_profile:
                 ptn = pool.prof.profed.npts
                 pto = b_ops.points
                 if b_eds.prof:
-                    self.update_edits(all, pool.profloc, ndo, ndn, pto, ptn)
-                    self.update_edits(all, pool.profrot, ndo, ndn, pto, ptn)
-                    self.update_edits(all, pool.blnd, ndo, ndn, pto, ptn)
+                    self.update_edits(pool.profloc, ndo, ndn, pto, ptn)
+                    self.update_edits(pool.profrot, ndo, ndn, pto, ptn)
+                    self.update_edits(pool.blnd, ndo, ndn, pto, ptn)
                 if b_eds.curve:
                     cuprof = pool.curve.direction == "profile"
                     nco = ndo if cuprof else pto
                     npo = pto if cuprof else ndo
-                    self.update_edits(all, pool.culoc, nco, pool.ncus, npo, pool.cpts)
-                    self.update_edits(all, pool.curot, nco, pool.ncus, npo, pool.cpts)
-                    self.update_nodes(all, pool.cudep, nco, pool.ncus)
-                    self.update_edits(all, pool.pnrad, nco, pool.ncus, npo, pool.cpts)
+                    self.update_edits(pool.culoc, nco, pool.ncus, npo, pool.cpts)
+                    self.update_edits(pool.curot, nco, pool.ncus, npo, pool.cpts)
+                    self.update_nodes(pool.cudep, nco, pool.ncus)
+                    self.update_edits(pool.pnrad, nco, pool.ncus, npo, pool.cpts)
             elif b_eds.curve:
-                self.update_nodes(all, pool.pnrad, ndo, pool.cpts)
+                self.update_nodes(pool.pnrad, ndo, pool.cpts)
             ModPOPC.scene_update(scene)
         except Exception as my_err:
             pool.update_ok = True

@@ -120,9 +120,6 @@ def helix(cns, cvs, pgob):
     col = row.column(align=True)
     col.enabled = pgob.hel_fac != 1.0
     col.prop(pgob, "hel_mir", text="mirror", toggle=True)
-    col = row.column(align=True)
-    col.enabled = (pgob.hel_fac != 1.0) and not pgob.hel_mir
-    col.prop(pgob, "hel_invert", toggle=True)
     row = cvs.row(align=True)
     col = row.column(align=True)
     col.prop(pgob, "hel_len", text="")

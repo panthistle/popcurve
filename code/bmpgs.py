@@ -119,11 +119,6 @@ class PTDBLNPOPC_anim_rots(bpy.types.PropertyGroup):
     )
 
 
-class PTDBLNPOPC_tmp_states(bpy.types.PropertyGroup):
-    on: bpy.props.BoolProperty(default=False)
-    off: bpy.props.BoolProperty(default=False)
-
-
 class PTDBLNPOPC_batchcoll_toggle(bpy.types.PropertyGroup):
     path: bpy.props.BoolProperty(
         name="path", description="toggle path edits", default=False, options={"HIDDEN"}
@@ -517,9 +512,6 @@ class PTDBLNPOPC_pathed(bpy.types.PropertyGroup):
         name="width factor", description="grow / shrink", default=1
     )
     hel_pha: bpy.props.FloatProperty(name="phase", description="angle shift", default=0)
-    hel_invert: bpy.props.BoolProperty(
-        name="invert", description="inverted width factor", default=False
-    )
     hel_hlrp: bpy.props.BoolProperty(
         name="length", description="interpolate length", default=False
     )
@@ -1212,7 +1204,6 @@ class PTDBLNPOPC_blnd(bpy.types.PropertyGroup):
     fac: bpy.props.FloatProperty(default=0)
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
     iprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_idx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_fac: bpy.props.BoolProperty(
@@ -1251,7 +1242,6 @@ class PTDBLNPOPC_pathloc(bpy.types.PropertyGroup):
     bbatt: bpy.props.BoolProperty(default=True)
     bbrot: bpy.props.BoolProperty(default=True)
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_fac: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_amount)
 
@@ -1279,7 +1269,6 @@ class PTDBLNPOPC_pathrot(bpy.types.PropertyGroup):
     brots: bpy.props.BoolProperty(default=False)
     pivot: bpy.props.FloatVectorProperty(size=3, default=(0, 0, 0))
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_rot: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_rots)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
 
@@ -1307,7 +1296,6 @@ class PTDBLNPOPC_profloc(bpy.types.PropertyGroup):
     bbrot: bpy.props.BoolProperty(default=True)
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
     iprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_idx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_fac: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_amount)
@@ -1335,7 +1323,6 @@ class PTDBLNPOPC_profrot(bpy.types.PropertyGroup):
     pivot: bpy.props.FloatVectorProperty(size=3, default=(0, 0, 0))
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
     iprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_rot: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_rots)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_idx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
@@ -1358,7 +1345,6 @@ class PTDBLNPOPC_culoc(bpy.types.PropertyGroup):
     globoo: bpy.props.BoolProperty(default=True)
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
     iprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_idx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_fac: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_amount)
@@ -1382,7 +1368,6 @@ class PTDBLNPOPC_curot(bpy.types.PropertyGroup):
     globoo: bpy.props.BoolProperty(default=True)
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
     iprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_rot: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_rots)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_idx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
@@ -1407,7 +1392,6 @@ class PTDBLNPOPC_cudep(bpy.types.PropertyGroup):
     active: bpy.props.BoolProperty(default=False)
     fac: bpy.props.FloatProperty(default=0.25)
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_fac: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_amount)
 
@@ -1426,7 +1410,6 @@ class PTDBLNPOPC_pnrad(bpy.types.PropertyGroup):
     fac: bpy.props.FloatProperty(default=1.0)
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
     iprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
-    tmp_state: bpy.props.PointerProperty(type=PTDBLNPOPC_tmp_states)
     ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_idx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
     ani_fac: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_amount)
@@ -3056,7 +3039,6 @@ classes = (
     PTDBLNPOPC_anim_mirror,
     PTDBLNPOPC_anim_amount,
     PTDBLNPOPC_anim_rots,
-    PTDBLNPOPC_tmp_states,
     PTDBLNPOPC_batchcoll_toggle,
     PTDBLNPOPC_params,
     PTDBLNPOPC_pathed,
