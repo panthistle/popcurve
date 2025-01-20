@@ -30,7 +30,7 @@ bl_info = {
     "version": (1, 8, 0),
     "blender": (3, 6, 0),
     "location": "View3D > UI",
-    "doc_url": "https://panthistle.github.io/pdfs/PCUG18.pdf",
+    "doc_url": "https://github.com/panthistle/popcurve",
     "category": "Curve",
 }
 
