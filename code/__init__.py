@@ -22,17 +22,18 @@
 #
 # ---------------------------- ADDON INFO --------------------------------------
 
+#################  FOR USE WITH BLENDER VERSION 3.6  #########################
 
-bl_info = {
-    "name": "PTDBLNPOPC",
-    "description": "path-on-path curve",
-    "author": "Pan Thistle",
-    "version": (1, 8, 0),
-    "blender": (3, 6, 0),
-    "location": "View3D > UI",
-    "doc_url": "https://github.com/panthistle/popcurve",
-    "category": "Curve",
-}
+#bl_info = {
+#    "name": "PTDBLNPOPC",
+#    "description": "path-on-path curves generator",
+#    "author": "Pan Thistle",
+#    "version": (1, 8, 0),
+#    "blender": (3, 6, 0),
+#    "location": "View3D > UI",
+#    "doc_url": "https://github.com/panthistle/popcurve",
+#    "category": "Curve",
+#}
 
 
 # ------------------------------------------------------------------------------

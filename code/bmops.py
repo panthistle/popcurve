@@ -1108,8 +1108,6 @@ class PTDBLNPOPC_OT_anicalc(bpy.types.Operator):
             beg = pool.ani_kf_start
             stp = pool.ani_kf_step
             loop = pool.ani_kf_loop
-            pool.anicalc.start = beg
-            pool.anicalc.step = stp
             pool.anicalc.loop = loop
             pool.anicalc.first = beg
             pool.anicalc.last = beg + stp * (loop - 1)
@@ -1121,7 +1119,7 @@ class PTDBLNPOPC_OT_anicalc(bpy.types.Operator):
         caller = clc.calc_type
         try:
             if caller == "loop":
-                val = clc.items * clc.step // clc.offset + clc.start
+                val = clc.items // clc.offset + 1
                 clc.info = str(val)
             elif caller == "offsets":
                 offsets = sorted(ModFNOP.anicalc_factors(clc.items))[:-1]

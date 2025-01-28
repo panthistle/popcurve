@@ -1,0 +1,22 @@
+schema_version = "1.0.0"
+
+id = "PTDBLNPOPC"
+version = "1.8.0"
+name = "PTDBLNPOPC"
+tagline = "path-on-path curves generator"
+maintainer = "Pan Thistle"
+type = "add-on"
+
+website = "https://github.com/panthistle/popcurve"
+tags = ["3D View", "User Interface"]
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+copyright = [
+  "2020-2025 Pan Thistle",
+]
+
+[permissions]
+files = "read/write JSON from/to disk"

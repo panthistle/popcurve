@@ -1737,7 +1737,7 @@ class PTDBLNPOPC_anicalc(bpy.types.PropertyGroup):
         description="calculation",
         items=(
             ("offsets", "offsets", "index offsets from items"),
-            ("loop", "loop", "loop from [items, offset, start, step]"),
+            ("loop", "loop", "loop from items and index offset"),
             ("cycles", "cycles", "mirror cycles from loop"),
             ("strip", "time scale", "strip time scale from control frame and function"),
         ),
@@ -1773,20 +1773,6 @@ class PTDBLNPOPC_anicalc(bpy.types.PropertyGroup):
         default=1,
         get=anicalc_offset_get,
         set=anicalc_offset_set,
-        options={"HIDDEN"},
-    )
-    start: bpy.props.IntProperty(
-        name="start",
-        description="start keyframe",
-        default=1,
-        min=1,
-        options={"HIDDEN"},
-    )
-    step: bpy.props.IntProperty(
-        name="step",
-        description="keyframe step",
-        default=1,
-        min=1,
         options={"HIDDEN"},
     )
     exp: bpy.props.EnumProperty(

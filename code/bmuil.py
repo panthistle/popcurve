@@ -1297,7 +1297,7 @@ class PTDBLNPOPC_PT_ui_anicalc(PTDBLNPOPC_PT_ui, bpy.types.Panel):
         c.operator("ptdblnpopc.anicalc", text="Calculate").current = False
         caller = clc.calc_type
         c = row.column(align=True)
-        c.enabled = caller != "offsets"
+        c.enabled = caller not in {"offsets", "loop"}
         c.operator("ptdblnpopc.anicalc", text="Current").current = True
         row = bcol.row(align=True)
         row.prop(clc, "calc_type", text="")
@@ -1307,9 +1307,6 @@ class PTDBLNPOPC_PT_ui_anicalc(PTDBLNPOPC_PT_ui, bpy.types.Panel):
         if caller == "loop":
             row.prop(clc, "items", text="")
             row.prop(clc, "offset", text="")
-            row = col.row(align=True)
-            row.prop(clc, "start", text="")
-            row.prop(clc, "step", text="")
         elif caller == "offsets":
             row.prop(clc, "items", text="")
         elif caller == "cycles":
