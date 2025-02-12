@@ -9,6 +9,8 @@
     "fillcaps": true,
     "endpoints": true,
     "bevdep": 0.25,
+    "cufac_beg": 0.0,
+    "cufac_end": 1.0,
     "pntrad": 1.0
   },
   "path": {
@@ -71,7 +73,6 @@
       "hel_stp": 2.0,
       "hel_fac": 1.0,
       "hel_pha": 0.0,
-      "hel_invert": false,
       "hel_hlrp": false,
       "hel_exp": 2.0,
       "hel_mir": false,
@@ -236,6 +237,7 @@
     ],
     "nseed": 0,
     "ani_noiz": false,
+    "ani_fac": 0.10000000149011612,
     "ani_seed": false,
     "ani_blin": 1,
     "ani_blout": 1,
@@ -289,15 +291,25 @@
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_fac": {
+        "pname": "all",
         "active": false,
         "fac": 0.0,
         "mirror": {
           "active": false,
           "cycles": 1
+        },
+        "delta_change": false,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
         }
       }
     },
@@ -337,15 +349,25 @@
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_fac": {
+        "pname": "all",
         "active": true,
         "fac": -5.0,
         "mirror": {
           "active": true,
           "cycles": 1
+        },
+        "delta_change": false,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
         }
       }
     }
@@ -361,7 +383,7 @@
       ],
       "angle": 0.0,
       "bbatt": "before",
-      "blocs": false,
+      "brots": false,
       "pivot": [
         0.0,
         0.0,
@@ -389,17 +411,23 @@
       "ani_rot": {
         "ani_ang": true,
         "angle": -0.1745329201221466,
-        "beg": 1,
-        "end": 1,
-        "lerp": false
+        "lerp": false,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_nidx": {
         "active": false,
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       }
     }
   ],
@@ -458,23 +486,36 @@
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_idx": {
         "active": false,
         "offrnd": false,
         "offrndseed": 0,
         "offset": 3,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_fac": {
+        "pname": "all",
         "active": false,
         "fac": 0.0,
         "mirror": {
-          "active": false,
+          "active": true,
           "cycles": 1
+        },
+        "delta_change": false,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
         }
       }
     }
@@ -484,6 +525,7 @@
   "curot": [],
   "cudep": [],
   "pnrad": [],
+  "cufac": [],
   "use_profile": true,
   "setcoll_name": "flower_loop",
   "ncus": 12,

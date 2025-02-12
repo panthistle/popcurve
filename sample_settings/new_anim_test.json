@@ -3,32 +3,32 @@
     "spline": "NURBS",
     "direction": "prof",
     "bevres": 4,
-    "ures": 4,
+    "ures": 12,
     "smooth": 0.0,
     "cyclic": true,
     "fillcaps": true,
     "endpoints": true,
-    "bevdep": 0.25,
+    "bevdep": 0.10000000149011612,
     "cufac_beg": 0.0,
     "cufac_end": 1.0,
     "pntrad": 1.0
   },
   "path": {
     "provider": "ellipse",
-    "res_lin": 12,
+    "res_lin": 8,
     "res_wav": 12,
-    "res_arc": 12,
-    "res_ell": 16,
+    "res_arc": 8,
+    "res_ell": 8,
     "res_pol": 12,
     "res_hel": 24,
     "res_spi": 24,
-    "res_tor": 20,
+    "res_tor": 36,
     "pathed": {
-      "npts": 16,
+      "npts": 8,
       "user_dim": [
-        16.0,
-        14.0,
-        12.0
+        0.0,
+        0.0,
+        0.0
       ],
       "user_piv": [
         0.0,
@@ -37,34 +37,34 @@
       ],
       "upv": [],
       "cust_dim": [
-        16.0,
-        14.0,
-        12.0
+        8.0,
+        8.0,
+        8.0
       ],
       "lin_dim": 8.0,
       "lin_ease": "LINEAR",
-      "lin_exp": 1.0,
+      "lin_exp": 2.0,
       "wav_dim": 8.0,
       "wav_amp": 0.5,
       "wav_frq": 1.0,
       "wav_pha": 0.0,
-      "arc_dim": 8.0,
-      "arc_fac": 4.0,
+      "arc_dim": 4.0,
+      "arc_fac": 2.0,
       "arc_off": 0.0,
       "ell_dim": [
-        12.0,
-        12.0
+        3.0,
+        3.0
       ],
       "pol_dim": [
-        18.0,
-        18.0
+        8.0,
+        8.0
       ],
       "pol_sid": 3,
       "pol_coff": 0.0,
       "pol_cres": 0,
       "pol_ang": 0.0,
       "pol_ease": "LINEAR",
-      "pol_exp": 1.0,
+      "pol_exp": 2.0,
       "hel_dim": [
         8.0,
         8.0
@@ -85,7 +85,7 @@
       ],
       "tor_stp": 4.0,
       "tor_pha": 0.0,
-      "closed": false
+      "closed": true
     },
     "ani_dim": false,
     "ani_dim_mirror": {
@@ -101,9 +101,9 @@
       8.0
     ],
     "ani_dim_3d": [
-      12.0,
-      6.0,
-      4.0
+      8.0,
+      8.0,
+      8.0
     ],
     "ani_fac": false,
     "ani_fac_mirror": {
@@ -125,11 +125,11 @@
       "active": false,
       "cycles": 1
     },
-    "ani_lin_exp": 1.0,
+    "ani_lin_exp": 2.0,
     "ani_wav_amp": 0.5,
     "ani_wav_frq": 1.0,
     "ani_wav_pha": 0.0,
-    "ani_arc_fac": 2.0,
+    "ani_arc_fac": 4.0,
     "ani_hel_len": 8.0,
     "ani_hel_fac": 1.0,
     "ani_hel_stp": 2.0,
@@ -140,22 +140,22 @@
   },
   "path_att": {
     "active": true,
-    "track": "Y",
-    "upfixed": true,
-    "up": "Z"
+    "track": "Z",
+    "upfixed": false,
+    "up": "X"
   },
   "prof": {
     "provider": "ellipse",
     "res_lin": 12,
     "res_wav": 12,
     "res_arc": 12,
-    "res_ell": 12,
+    "res_ell": 8,
     "res_pol": 12,
     "profed": {
-      "npts": 12,
+      "npts": 8,
       "user_dim": [
-        2.0,
-        2.0
+        0.0,
+        0.0
       ],
       "user_piv": [
         0.0,
@@ -167,44 +167,44 @@
         2.0,
         2.0
       ],
-      "lin_dim": 3.8299999237060547,
+      "lin_dim": 2.0,
       "lin_ease": "LINEAR",
-      "lin_exp": 1.0,
-      "wav_dim": 4.460000038146973,
+      "lin_exp": 2.0,
+      "wav_dim": 2.0,
       "wav_amp": 0.5,
       "wav_frq": 1.0,
       "wav_pha": 0.0,
-      "arc_dim": 4.939999580383301,
-      "arc_fac": 2.1999998092651367,
+      "arc_dim": 2.0,
+      "arc_fac": 1.0,
       "arc_off": 0.0,
       "ell_dim": [
-        4.0,
-        4.0
+        1.0,
+        1.0
       ],
       "pol_dim": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
-      "pol_sid": 4,
+      "pol_sid": 3,
       "pol_coff": 0.0,
       "pol_cres": 0,
       "pol_ang": 0.0,
       "pol_ease": "LINEAR",
-      "pol_exp": 1.0,
+      "pol_exp": 2.0,
       "idx": 0,
       "rot_align": 0.0
     },
     "ani_dim": false,
     "ani_dim_mirror": {
       "active": false,
-      "cycles": 4
+      "cycles": 1
     },
     "ani_lin_dim": 2.0,
     "ani_wav_dim": 2.0,
     "ani_arc_dim": 2.0,
     "ani_epc_dim": [
-      4.0,
-      4.0
+      2.0,
+      2.0
     ],
     "ani_fac": false,
     "ani_fac_mirror": {
@@ -221,7 +221,7 @@
       "active": false,
       "cycles": 1
     },
-    "ani_lin_exp": 1.0,
+    "ani_lin_exp": 2.0,
     "ani_wav_amp": 0.5,
     "ani_wav_frq": 1.0,
     "ani_wav_pha": 0.0,
@@ -258,85 +258,27 @@
     {
       "name": "Location",
       "active": true,
-      "fac": 22.5,
+      "fac": 0.0,
       "axis": [
-        0.0,
-        0.0,
-        -1.0
+        1.0,
+        1.0,
+        0.0
       ],
-      "absboo": true,
+      "absboo": false,
       "bbatt": false,
       "bbrot": true,
       "nprams": {
-        "npts": 16,
+        "npts": 8,
         "ease": "OFF",
-        "exp": 1.0,
+        "exp": 2.0,
         "cyc": false,
         "mir": false,
         "rev": false,
         "reflect": "0",
-        "idx": 0,
-        "itm": 16,
-        "gap": 0,
-        "reps": 1,
-        "repfstp": 1,
-        "repfoff": 1.0,
-        "rnduse": false,
-        "rndval": 1.0,
-        "rndseed": 0,
-        "rndshuff": false
-      },
-      "ani_nidx": {
-        "active": false,
-        "offrnd": false,
-        "offrndseed": 0,
-        "offset": 0,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      },
-      "ani_fac": {
-        "pname": "all",
-        "active": false,
-        "fac": 0.0,
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        },
-        "delta_change": false,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      }
-    },
-    {
-      "name": "Location",
-      "active": true,
-      "fac": 50.0,
-      "axis": [
-        0.0,
-        0.0,
-        1.0
-      ],
-      "absboo": true,
-      "bbatt": false,
-      "bbrot": true,
-      "nprams": {
-        "npts": 16,
-        "ease": "LINEAR",
-        "exp": 2.0,
-        "cyc": true,
-        "mir": false,
-        "rev": false,
-        "reflect": "0",
-        "idx": 0,
-        "itm": 16,
-        "gap": 0,
-        "reps": 1,
+        "idx": 7,
+        "itm": 1,
+        "gap": 3,
+        "reps": 2,
         "repfstp": 1,
         "repfoff": 1.0,
         "rnduse": false,
@@ -346,22 +288,22 @@
       },
       "ani_nidx": {
         "active": true,
-        "offrnd": false,
+        "offrnd": true,
         "offrndseed": 0,
-        "offset": 1,
+        "offset": 8,
         "keyframes": {
           "beg": 1,
           "end": 1,
-          "stp": 1
+          "stp": 4
         }
       },
       "ani_fac": {
         "pname": "all",
-        "active": false,
-        "fac": 0.0,
+        "active": true,
+        "fac": 0.5,
         "mirror": {
-          "active": false,
-          "cycles": 1
+          "active": true,
+          "cycles": 16
         },
         "delta_change": false,
         "keyframes": {
@@ -373,30 +315,37 @@
     }
   ],
   "pathrot": [],
-  "profloc": [
+  "profloc": [],
+  "profrot": [],
+  "culoc": [],
+  "curot": [
     {
-      "name": "Location",
+      "name": "Rotation",
       "active": true,
-      "fac": -0.699999988079071,
       "axis": [
         1.0,
-        1.0,
+        0.0,
         0.0
       ],
-      "absboo": false,
-      "bbrot": true,
+      "angle": 0.0,
+      "pivot": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "globoo": false,
       "nprams": {
-        "npts": 16,
-        "ease": "IN",
+        "npts": 8,
+        "ease": "OFF",
         "exp": 2.0,
-        "cyc": true,
+        "cyc": false,
         "mir": false,
         "rev": false,
-        "reflect": "1",
-        "idx": 0,
-        "itm": 16,
-        "gap": 0,
-        "reps": 1,
+        "reflect": "0",
+        "idx": 7,
+        "itm": 1,
+        "gap": 3,
+        "reps": 2,
         "repfstp": 1,
         "repfoff": 1.0,
         "rnduse": false,
@@ -405,15 +354,15 @@
         "rndshuff": false
       },
       "iprams": {
-        "npts": 12,
+        "npts": 8,
         "ease": "OFF",
-        "exp": 1.0,
+        "exp": 2.0,
         "cyc": false,
         "mir": false,
         "rev": false,
         "reflect": "0",
         "idx": 0,
-        "itm": 12,
+        "itm": 8,
         "gap": 0,
         "reps": 1,
         "repfstp": 1,
@@ -423,15 +372,25 @@
         "rndseed": 0,
         "rndshuff": false
       },
-      "ani_nidx": {
-        "active": true,
-        "offrnd": false,
-        "offrndseed": 0,
-        "offset": 1,
+      "ani_rot": {
+        "ani_ang": true,
+        "angle": 0.39269909262657166,
+        "lerp": true,
         "keyframes": {
           "beg": 1,
           "end": 1,
           "stp": 1
+        }
+      },
+      "ani_nidx": {
+        "active": true,
+        "offrnd": true,
+        "offrndseed": 2,
+        "offset": 8,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 4
         }
       },
       "ani_idx": {
@@ -444,87 +403,18 @@
           "end": 1,
           "stp": 1
         }
-      },
-      "ani_fac": {
-        "pname": "all",
-        "active": false,
-        "fac": 0.0,
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        },
-        "delta_change": false,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
       }
     }
   ],
-  "profrot": [],
-  "culoc": [],
-  "curot": [],
-  "cudep": [
-    {
-      "name": "Depth",
-      "active": true,
-      "fac": 0.10000000149011612,
-      "nprams": {
-        "npts": 16,
-        "ease": "OUT",
-        "exp": 2.0,
-        "cyc": true,
-        "mir": false,
-        "rev": false,
-        "reflect": "1",
-        "idx": 0,
-        "itm": 16,
-        "gap": 0,
-        "reps": 1,
-        "repfstp": 1,
-        "repfoff": 1.0,
-        "rnduse": false,
-        "rndval": 1.0,
-        "rndseed": 0,
-        "rndshuff": false
-      },
-      "ani_nidx": {
-        "active": true,
-        "offrnd": false,
-        "offrndseed": 0,
-        "offset": 1,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      },
-      "ani_fac": {
-        "pname": "all",
-        "active": false,
-        "fac": 0.0,
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        },
-        "delta_change": false,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      }
-    }
-  ],
+  "cudep": [],
   "pnrad": [],
   "cufac": [],
   "use_profile": true,
-  "setcoll_name": "vortex_ellipse",
-  "ncus": 16,
-  "cpts": 12,
+  "setcoll_name": "new_anim_test",
+  "ncus": 8,
+  "cpts": 8,
   "ani_kf_type": "1",
   "ani_kf_start": 1,
   "ani_kf_step": 10,
-  "ani_kf_loop": 17
+  "ani_kf_loop": 65
 }

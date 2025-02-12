@@ -3,32 +3,32 @@
     "spline": "NURBS",
     "direction": "prof",
     "bevres": 4,
-    "ures": 4,
+    "ures": 12,
     "smooth": 0.0,
-    "cyclic": true,
+    "cyclic": false,
     "fillcaps": true,
     "endpoints": true,
-    "bevdep": 0.25,
+    "bevdep": 0.11999999731779099,
     "cufac_beg": 0.0,
     "cufac_end": 1.0,
     "pntrad": 1.0
   },
   "path": {
-    "provider": "ellipse",
+    "provider": "wave",
     "res_lin": 12,
     "res_wav": 12,
     "res_arc": 12,
-    "res_ell": 16,
+    "res_ell": 12,
     "res_pol": 12,
     "res_hel": 24,
     "res_spi": 24,
-    "res_tor": 20,
+    "res_tor": 36,
     "pathed": {
-      "npts": 16,
+      "npts": 12,
       "user_dim": [
-        16.0,
-        14.0,
-        12.0
+        0.0,
+        0.0,
+        0.0
       ],
       "user_piv": [
         0.0,
@@ -37,13 +37,13 @@
       ],
       "upv": [],
       "cust_dim": [
-        16.0,
-        14.0,
-        12.0
+        8.0,
+        8.0,
+        8.0
       ],
       "lin_dim": 8.0,
       "lin_ease": "LINEAR",
-      "lin_exp": 1.0,
+      "lin_exp": 2.0,
       "wav_dim": 8.0,
       "wav_amp": 0.5,
       "wav_frq": 1.0,
@@ -52,19 +52,19 @@
       "arc_fac": 4.0,
       "arc_off": 0.0,
       "ell_dim": [
-        12.0,
-        12.0
+        6.0,
+        7.0
       ],
       "pol_dim": [
-        18.0,
-        18.0
+        8.0,
+        8.0
       ],
       "pol_sid": 3,
       "pol_coff": 0.0,
       "pol_cres": 0,
       "pol_ang": 0.0,
       "pol_ease": "LINEAR",
-      "pol_exp": 1.0,
+      "pol_exp": 2.0,
       "hel_dim": [
         8.0,
         8.0
@@ -97,13 +97,13 @@
     "ani_arc_dim": 8.0,
     "ani_spi_dim": 8.0,
     "ani_dim_2d": [
-      8.0,
-      8.0
+      7.0,
+      6.0
     ],
     "ani_dim_3d": [
-      12.0,
-      6.0,
-      4.0
+      8.0,
+      8.0,
+      8.0
     ],
     "ani_fac": false,
     "ani_fac_mirror": {
@@ -115,7 +115,7 @@
       "active": false,
       "cycles": 1
     },
-    "ani_fac3": false,
+    "ani_fac3": true,
     "ani_fac3_mirror": {
       "active": false,
       "cycles": 1
@@ -125,11 +125,11 @@
       "active": false,
       "cycles": 1
     },
-    "ani_lin_exp": 1.0,
+    "ani_lin_exp": 2.0,
     "ani_wav_amp": 0.5,
     "ani_wav_frq": 1.0,
-    "ani_wav_pha": 0.0,
-    "ani_arc_fac": 2.0,
+    "ani_wav_pha": 12.566370964050293,
+    "ani_arc_fac": 4.0,
     "ani_hel_len": 8.0,
     "ani_hel_fac": 1.0,
     "ani_hel_stp": 2.0,
@@ -140,22 +140,22 @@
   },
   "path_att": {
     "active": true,
-    "track": "Y",
+    "track": "Z",
     "upfixed": true,
-    "up": "Z"
+    "up": "X"
   },
   "prof": {
-    "provider": "ellipse",
+    "provider": "wave",
     "res_lin": 12,
-    "res_wav": 12,
+    "res_wav": 30,
     "res_arc": 12,
     "res_ell": 12,
     "res_pol": 12,
     "profed": {
-      "npts": 12,
+      "npts": 30,
       "user_dim": [
-        2.0,
-        2.0
+        0.0,
+        0.0
       ],
       "user_piv": [
         0.0,
@@ -167,44 +167,44 @@
         2.0,
         2.0
       ],
-      "lin_dim": 3.8299999237060547,
+      "lin_dim": 2.0,
       "lin_ease": "LINEAR",
-      "lin_exp": 1.0,
-      "wav_dim": 4.460000038146973,
+      "lin_exp": 2.0,
+      "wav_dim": 4.0,
       "wav_amp": 0.5,
       "wav_frq": 1.0,
       "wav_pha": 0.0,
-      "arc_dim": 4.939999580383301,
-      "arc_fac": 2.1999998092651367,
+      "arc_dim": 2.0,
+      "arc_fac": 1.0,
       "arc_off": 0.0,
       "ell_dim": [
-        4.0,
-        4.0
+        2.0,
+        2.0
       ],
       "pol_dim": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
-      "pol_sid": 4,
+      "pol_sid": 3,
       "pol_coff": 0.0,
       "pol_cres": 0,
       "pol_ang": 0.0,
       "pol_ease": "LINEAR",
-      "pol_exp": 1.0,
+      "pol_exp": 2.0,
       "idx": 0,
       "rot_align": 0.0
     },
     "ani_dim": false,
     "ani_dim_mirror": {
       "active": false,
-      "cycles": 4
+      "cycles": 1
     },
     "ani_lin_dim": 2.0,
     "ani_wav_dim": 2.0,
     "ani_arc_dim": 2.0,
     "ani_epc_dim": [
-      4.0,
-      4.0
+      2.0,
+      2.0
     ],
     "ani_fac": false,
     "ani_fac_mirror": {
@@ -216,15 +216,15 @@
       "active": false,
       "cycles": 1
     },
-    "ani_fac3": false,
+    "ani_fac3": true,
     "ani_fac3_mirror": {
       "active": false,
       "cycles": 1
     },
-    "ani_lin_exp": 1.0,
+    "ani_lin_exp": 2.0,
     "ani_wav_amp": 0.5,
     "ani_wav_frq": 1.0,
-    "ani_wav_pha": 0.0,
+    "ani_wav_pha": 12.566370964050293,
     "ani_arc_fac": 1.0
   },
   "noiz": {
@@ -254,35 +254,53 @@
     "nseed": 0
   },
   "blnd": [],
-  "pathloc": [
+  "pathloc": [],
+  "pathrot": [],
+  "profloc": [],
+  "profrot": [],
+  "culoc": [],
+  "curot": [],
+  "cudep": [],
+  "pnrad": [
     {
-      "name": "Location",
+      "name": "Radius",
       "active": true,
-      "fac": 22.5,
-      "axis": [
-        0.0,
-        0.0,
-        -1.0
-      ],
-      "absboo": true,
-      "bbatt": false,
-      "bbrot": true,
+      "fac": 1.5,
       "nprams": {
-        "npts": 16,
+        "npts": 12,
         "ease": "OFF",
-        "exp": 1.0,
+        "exp": 2.0,
         "cyc": false,
         "mir": false,
         "rev": false,
         "reflect": "0",
-        "idx": 0,
-        "itm": 16,
+        "idx": 1,
+        "itm": 12,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": true,
+        "rndval": 1.0,
+        "rndseed": 2,
+        "rndshuff": false
+      },
+      "iprams": {
+        "npts": 30,
+        "ease": "IN-OUT",
+        "exp": 2.0,
+        "cyc": false,
+        "mir": true,
+        "rev": false,
+        "reflect": "0",
+        "idx": 7,
+        "itm": 30,
         "gap": 0,
         "reps": 1,
         "repfstp": 1,
         "repfoff": 1.0,
         "rnduse": false,
-        "rndval": 1.0,
+        "rndval": 0.1899999976158142,
         "rndseed": 0,
         "rndshuff": false
       },
@@ -297,13 +315,24 @@
           "stp": 1
         }
       },
+      "ani_idx": {
+        "active": true,
+        "offrnd": false,
+        "offrndseed": 2,
+        "offset": 1,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
+      },
       "ani_fac": {
         "pname": "all",
-        "active": false,
-        "fac": 0.0,
+        "active": true,
+        "fac": 1.0,
         "mirror": {
-          "active": false,
-          "cycles": 1
+          "active": true,
+          "cycles": 3
         },
         "delta_change": false,
         "keyframes": {
@@ -314,127 +343,48 @@
       }
     },
     {
-      "name": "Location",
+      "name": "Radius",
       "active": true,
-      "fac": 50.0,
-      "axis": [
-        0.0,
-        0.0,
-        1.0
-      ],
-      "absboo": true,
-      "bbatt": false,
-      "bbrot": true,
+      "fac": 1.5,
       "nprams": {
-        "npts": 16,
-        "ease": "LINEAR",
-        "exp": 2.0,
-        "cyc": true,
-        "mir": false,
-        "rev": false,
-        "reflect": "0",
-        "idx": 0,
-        "itm": 16,
-        "gap": 0,
-        "reps": 1,
-        "repfstp": 1,
-        "repfoff": 1.0,
-        "rnduse": false,
-        "rndval": 1.0,
-        "rndseed": 0,
-        "rndshuff": false
-      },
-      "ani_nidx": {
-        "active": true,
-        "offrnd": false,
-        "offrndseed": 0,
-        "offset": 1,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      },
-      "ani_fac": {
-        "pname": "all",
-        "active": false,
-        "fac": 0.0,
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        },
-        "delta_change": false,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      }
-    }
-  ],
-  "pathrot": [],
-  "profloc": [
-    {
-      "name": "Location",
-      "active": true,
-      "fac": -0.699999988079071,
-      "axis": [
-        1.0,
-        1.0,
-        0.0
-      ],
-      "absboo": false,
-      "bbrot": true,
-      "nprams": {
-        "npts": 16,
-        "ease": "IN",
-        "exp": 2.0,
-        "cyc": true,
-        "mir": false,
-        "rev": false,
-        "reflect": "1",
-        "idx": 0,
-        "itm": 16,
-        "gap": 0,
-        "reps": 1,
-        "repfstp": 1,
-        "repfoff": 1.0,
-        "rnduse": false,
-        "rndval": 1.0,
-        "rndseed": 0,
-        "rndshuff": false
-      },
-      "iprams": {
         "npts": 12,
         "ease": "OFF",
-        "exp": 1.0,
+        "exp": 2.0,
         "cyc": false,
         "mir": false,
         "rev": false,
         "reflect": "0",
-        "idx": 0,
+        "idx": 5,
         "itm": 12,
         "gap": 0,
         "reps": 1,
         "repfstp": 1,
         "repfoff": 1.0,
-        "rnduse": false,
+        "rnduse": true,
         "rndval": 1.0,
+        "rndseed": 5,
+        "rndshuff": false
+      },
+      "iprams": {
+        "npts": 30,
+        "ease": "IN-OUT",
+        "exp": 2.0,
+        "cyc": false,
+        "mir": true,
+        "rev": false,
+        "reflect": "0",
+        "idx": 1,
+        "itm": 30,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 0.20000000298023224,
         "rndseed": 0,
         "rndshuff": false
       },
       "ani_nidx": {
-        "active": true,
-        "offrnd": false,
-        "offrndseed": 0,
-        "offset": 1,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      },
-      "ani_idx": {
         "active": false,
         "offrnd": false,
         "offrndseed": 0,
@@ -445,51 +395,7 @@
           "stp": 1
         }
       },
-      "ani_fac": {
-        "pname": "all",
-        "active": false,
-        "fac": 0.0,
-        "mirror": {
-          "active": false,
-          "cycles": 1
-        },
-        "delta_change": false,
-        "keyframes": {
-          "beg": 1,
-          "end": 1,
-          "stp": 1
-        }
-      }
-    }
-  ],
-  "profrot": [],
-  "culoc": [],
-  "curot": [],
-  "cudep": [
-    {
-      "name": "Depth",
-      "active": true,
-      "fac": 0.10000000149011612,
-      "nprams": {
-        "npts": 16,
-        "ease": "OUT",
-        "exp": 2.0,
-        "cyc": true,
-        "mir": false,
-        "rev": false,
-        "reflect": "1",
-        "idx": 0,
-        "itm": 16,
-        "gap": 0,
-        "reps": 1,
-        "repfstp": 1,
-        "repfoff": 1.0,
-        "rnduse": false,
-        "rndval": 1.0,
-        "rndseed": 0,
-        "rndshuff": false
-      },
-      "ani_nidx": {
+      "ani_idx": {
         "active": true,
         "offrnd": false,
         "offrndseed": 0,
@@ -501,11 +407,91 @@
         }
       },
       "ani_fac": {
-        "pname": "all",
-        "active": false,
-        "fac": 0.0,
+        "pname": "pnrad",
+        "active": true,
+        "fac": 1.0,
         "mirror": {
-          "active": false,
+          "active": true,
+          "cycles": 5
+        },
+        "delta_change": false,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
+      }
+    },
+    {
+      "name": "Radius",
+      "active": true,
+      "fac": 1.5,
+      "nprams": {
+        "npts": 12,
+        "ease": "OFF",
+        "exp": 2.0,
+        "cyc": false,
+        "mir": false,
+        "rev": false,
+        "reflect": "0",
+        "idx": 8,
+        "itm": 12,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": true,
+        "rndval": 1.0,
+        "rndseed": 6,
+        "rndshuff": false
+      },
+      "iprams": {
+        "npts": 30,
+        "ease": "IN-OUT",
+        "exp": 2.0,
+        "cyc": false,
+        "mir": true,
+        "rev": false,
+        "reflect": "0",
+        "idx": 10,
+        "itm": 30,
+        "gap": 0,
+        "reps": 1,
+        "repfstp": 1,
+        "repfoff": 1.0,
+        "rnduse": false,
+        "rndval": 0.20000000298023224,
+        "rndseed": 0,
+        "rndshuff": false
+      },
+      "ani_nidx": {
+        "active": false,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": 0,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
+      },
+      "ani_idx": {
+        "active": true,
+        "offrnd": false,
+        "offrndseed": 0,
+        "offset": 1,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
+      },
+      "ani_fac": {
+        "pname": "pnrad",
+        "active": true,
+        "fac": 1.0,
+        "mirror": {
+          "active": true,
           "cycles": 1
         },
         "delta_change": false,
@@ -517,14 +503,13 @@
       }
     }
   ],
-  "pnrad": [],
   "cufac": [],
   "use_profile": true,
-  "setcoll_name": "vortex_ellipse",
-  "ncus": 16,
-  "cpts": 12,
+  "setcoll_name": "noodle_dance",
+  "ncus": 12,
+  "cpts": 30,
   "ani_kf_type": "1",
   "ani_kf_start": 1,
   "ani_kf_step": 10,
-  "ani_kf_loop": 17
+  "ani_kf_loop": 31
 }

@@ -9,6 +9,8 @@
     "fillcaps": true,
     "endpoints": true,
     "bevdep": 0.15000000596046448,
+    "cufac_beg": 0.0,
+    "cufac_end": 1.0,
     "pntrad": 1.0
   },
   "path": {
@@ -39,7 +41,7 @@
         8.0,
         8.0
       ],
-      "lin_dim": 9.999999747378752e-05,
+      "lin_dim": 0.0,
       "lin_ease": "LINEAR",
       "lin_exp": 2.0,
       "wav_dim": 8.0,
@@ -71,7 +73,6 @@
       "hel_stp": 2.0,
       "hel_fac": 1.0,
       "hel_pha": 0.0,
-      "hel_invert": false,
       "hel_hlrp": false,
       "hel_exp": 2.0,
       "hel_mir": false,
@@ -139,9 +140,9 @@
   },
   "path_att": {
     "active": true,
-    "track": "Z",
+    "track": "Y",
     "upfixed": false,
-    "up": "Y"
+    "up": "Z"
   },
   "prof": {
     "provider": "ellipse",
@@ -236,6 +237,7 @@
     ],
     "nseed": 0,
     "ani_noiz": false,
+    "ani_fac": 0.10000000149011612,
     "ani_seed": false,
     "ani_blin": 1,
     "ani_blout": 1,
@@ -343,16 +345,22 @@
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_idx": {
         "active": false,
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_fac": false,
       "ani_fac_val": 0.0,
@@ -399,15 +407,25 @@
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_fac": {
+        "pname": "all",
         "active": false,
         "fac": 0.0,
         "mirror": {
           "active": false,
           "cycles": 1
+        },
+        "delta_change": false,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
         }
       }
     }
@@ -451,17 +469,23 @@
       "ani_rot": {
         "ani_ang": false,
         "angle": 0.0,
-        "beg": 1,
-        "end": 1,
-        "lerp": false
+        "lerp": false,
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       },
       "ani_nidx": {
         "active": false,
         "offrnd": false,
         "offrndseed": 0,
         "offset": 0,
-        "beg": 1,
-        "stp": 1
+        "keyframes": {
+          "beg": 1,
+          "end": 1,
+          "stp": 1
+        }
       }
     }
   ],
@@ -471,6 +495,7 @@
   "curot": [],
   "cudep": [],
   "pnrad": [],
+  "cufac": [],
   "use_profile": true,
   "setcoll_name": "zeroline_circle",
   "ncus": 20,
