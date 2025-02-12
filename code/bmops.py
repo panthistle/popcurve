@@ -208,8 +208,11 @@ class PTDBLNPOPC_OT_batchcoll_toggle(bpy.types.Operator):
                         self.disable_items(pool.culoc)
                         self.disable_items(pool.curot)
                         self.disable_items(pool.cudep)
+                        self.disable_items(pool.cufac)
                         self.disable_items(pool.pnrad)
                 elif b_ops.curve:
+                    self.disable_items(pool.cudep)
+                    self.disable_items(pool.cufac)
                     self.disable_items(pool.pnrad)
             else:
                 if b_ops.path:
@@ -224,8 +227,11 @@ class PTDBLNPOPC_OT_batchcoll_toggle(bpy.types.Operator):
                         self.enable_items(pool.culoc)
                         self.enable_items(pool.curot)
                         self.enable_items(pool.cudep)
+                        self.enable_items(pool.cufac)
                         self.enable_items(pool.pnrad)
                 elif b_ops.curve:
+                    self.enable_items(pool.cudep)
+                    self.enable_items(pool.cufac)
                     self.enable_items(pool.pnrad)
             ModPOPC.scene_update(scene)
         except Exception as my_err:
@@ -281,6 +287,7 @@ class PTDBLNPOPC_OT_batchcoll_update(bpy.types.Operator):
                     self.update_edits(pool.culoc, nco, pool.ncus, npo, pool.cpts)
                     self.update_edits(pool.curot, nco, pool.ncus, npo, pool.cpts)
                     self.update_nodes(pool.cudep, nco, pool.ncus)
+                    self.update_nodes(pool.cufac, nco, pool.ncus)
                     self.update_edits(pool.pnrad, nco, pool.ncus, npo, pool.cpts)
             elif b_eds.curve:
                 self.update_nodes(pool.pnrad, ndo, pool.cpts)
@@ -433,13 +440,13 @@ class PTDBLNPOPC_OT_pop_noiz(bpy.types.Operator):
     bl_options = {"REGISTER", "INTERNAL", "UNDO"}
 
     ampli: bpy.props.FloatProperty(
-        name="amplitude", description="noise amount", default=0, min=0
+        name="amplitude", description="noise amount", default=0
     )
     nseed: bpy.props.IntProperty(
         name="seed", description="random seed", default=0, min=0
     )
     vfac: bpy.props.FloatVectorProperty(
-        name="axis", description="axis factor", size=3, default=(0, 0, 0), min=0, max=1
+        name="axis", description="axis factor", size=3, default=(0, 0, 0), min=-1, max=1
     )
 
     @classmethod
@@ -743,14 +750,16 @@ class PTDBLNPOPC_OT_citem_add(bpy.types.Operator):
             item.active = False
             if cname in {"pathloc", "pathrot"}:
                 item.nprams.npts = pool.path.pathed.npts
+            elif cname in {"cudep", "cufac"}:
+                item.nprams.npts = pool.ncus
+                item.ani_fac.pname = cname
             elif pool.use_profile:
                 if cname in {"profloc", "profrot"}:
                     item.nprams.npts = pool.path.pathed.npts
                     item.iprams.npts = pool.prof.profed.npts
                 else:
                     item.nprams.npts = pool.ncus
-                    if cname in {"culoc", "curot", "pnrad"}:
-                        item.iprams.npts = pool.cpts
+                    item.iprams.npts = pool.cpts
             elif cname == "pnrad":
                 item.nprams.npts = pool.cpts
             idx = len(coll) - 1
@@ -796,6 +805,7 @@ class PTDBLNPOPC_OT_citem_copy(bpy.types.Operator):
             target = coll[idx]
             d = target.to_dct()
             item = coll.add()
+            item.ani_fac.pname = cname
             self.dct_to_pg(d, item)
             idx = len(coll) - 1
             setattr(pool, iname, idx)
@@ -1697,13 +1707,14 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
             self.report({"INFO"}, f"{my_err.args}")
             return {"CANCELLED"}
 
-        # ------------------ Action evaluation -------------------#
+        # ------------------ Action Evaluation -------------------#
 
         try:
             act_loc = pool.data_anim_state_eval()
             act_dep = pool.deps_anim_state_eval()
+            act_fac = pool.facs_anim_state_eval()
             act_rad = pool.rads_anim_state_eval()
-            if not (act_loc or act_dep or act_rad):
+            if not (act_loc or act_dep or act_fac or act_rad):
                 raise Exception("no animation values!")
         except Exception as my_err:
             pool.update_ok = True
@@ -1717,18 +1728,20 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
         loop = pool.ani_kf_loop
         try:
             if act_dep:
-                cudep_d = ModFNOP.aniact_edvals_dict_onedim(pool.cudep, loop, False)
+                cudep_d = ModFNOP.aniact_edvals_dict_onedim(pool.cudep, loop)
+            if act_fac:
+                cufac_d = ModFNOP.aniact_edvals_dict_onedim(pool.cufac, loop)
             if act_rad:
                 if use_profile:
                     pnrad_d = ModFNOP.aniact_edvals_dict_twodim(pool.pnrad, loop)
                 else:
-                    pnrad_d = ModFNOP.aniact_edvals_dict_onedim(pool.pnrad, loop, True)
+                    pnrad_d = ModFNOP.aniact_edvals_dict_onedim(pool.pnrad, loop)
             if act_loc:
                 path = pool.path
                 path_flag = path.anim_state()
                 if path_flag:
                     path_d = ModFNOP.aniact_path_edit_dict(path, loop)
-                pathloc_d = ModFNOP.aniact_edvals_dict_onedim(pool.pathloc, loop, False)
+                pathloc_d = ModFNOP.aniact_edvals_dict_onedim(pool.pathloc, loop)
                 pathrot_d = ModFNOP.aniact_edrots_dict_onedim(pool.pathrot, loop)
                 noiz = pool.noiz
                 if noiz.active:
@@ -1762,6 +1775,8 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
         live_curves = len(sindz) if sindz_on else ncus
         kloc = [[] for _ in range(live_curves)]
         kdep = []
+        kbeg = []
+        kend = []
         krad = []
         try:
             pop = ModPOPC.new_pop_instance(pool)
@@ -1873,18 +1888,45 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
                     if sindz_on:
                         deps = [deps[j] for j in range(ncus) if j in sindz]
                     kdep.append(deps)
-                if act_rad:
-                    for dct, ids, ams, nids, lid in zip(
-                        pnrad_d["dcts"],
-                        pnrad_d["ids"],
-                        pnrad_d["ams"],
-                        pnrad_d["nids"],
-                        pnrad_d["lids"],
+                if act_fac:
+                    for dct, nids, ams, lid in zip(
+                        cufac_d["dcts"],
+                        cufac_d["nids"],
+                        cufac_d["ams"],
+                        cufac_d["lids"],
                     ):
-                        dct["iprams"]["idx"] = ids[i]
-                        dct["fac"] = ams[i]
                         dct["nprams"]["idx"] = nids[i]
-                        pop.curadius_anim_data(dct, lid)
+                        dct["fac"] = ams[i]
+                        pop.cufactor_anim_data(dct, lid)
+                    begs, ends = pop.get_bevfacs()
+                    if sindz_on:
+                        begs = [begs[j] for j in range(ncus) if j in sindz]
+                        ends = [ends[j] for j in range(ncus) if j in sindz]
+                    kbeg.append(begs)
+                    kend.append(ends)
+                if act_rad:
+                    if use_profile:
+                        for dct, ids, ams, nids, lid in zip(
+                            pnrad_d["dcts"],
+                            pnrad_d["ids"],
+                            pnrad_d["ams"],
+                            pnrad_d["nids"],
+                            pnrad_d["lids"],
+                        ):
+                            dct["iprams"]["idx"] = ids[i]
+                            dct["fac"] = ams[i]
+                            dct["nprams"]["idx"] = nids[i]
+                            pop.curadius_anim_data(dct, lid)
+                    else:
+                        for dct, ams, nids, lid in zip(
+                            pnrad_d["dcts"],
+                            pnrad_d["ams"],
+                            pnrad_d["nids"],
+                            pnrad_d["lids"],
+                        ):
+                            dct["fac"] = ams[i]
+                            dct["nprams"]["idx"] = nids[i]
+                            pop.curadius_anim_data(dct, lid)
                     rads = pop.get_pntrads()
                     if sindz_on:
                         rads = [rads[j] for j in range(ncus) if j in sindz]
@@ -1923,6 +1965,14 @@ class PTDBLNPOPC_OT_anim_action(bpy.types.Operator):
                     dp = "bevel_depth"
                     vls = [deps[i] for deps in kdep]
                     di = 0
+                    fc_create(action, dp, di, fls, vls, kls, loop)
+                if act_fac:
+                    dp = "bevel_factor_start"
+                    vls = [begs[i] for begs in kbeg]
+                    di = 0
+                    fc_create(action, dp, di, fls, vls, kls, loop)
+                    dp = "bevel_factor_end"
+                    vls = [ends[i] for ends in kend]
                     fc_create(action, dp, di, fls, vls, kls, loop)
                 if act_rad:
                     vals = [rads[i] for rads in krad]

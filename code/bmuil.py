@@ -106,6 +106,15 @@ class PTDBLNPOPC_UL_cudep(bpy.types.UIList):
         layout.prop(item, "name", text="", emboss=False, icon=cust_icon)
 
 
+class PTDBLNPOPC_UL_cufac(bpy.types.UIList):
+    def draw_item(
+        self, context, layout, data, item, icon, active_data, active_propname, index
+    ):
+        self.use_filter_show = False
+        cust_icon = "REC" if item.active else "RADIOBUT_OFF"
+        layout.prop(item, "name", text="", emboss=False, icon=cust_icon)
+
+
 class PTDBLNPOPC_UL_pnrad(bpy.types.UIList):
     def draw_item(
         self, context, layout, data, item, icon, active_data, active_propname, index
@@ -222,8 +231,9 @@ def anim_rot_tmpl(c, ob):
     col.prop(ob, "angle", text="")
     row = c.row(align=True)
     row.enabled = ob.ani_ang
-    row.prop(ob, "beg", text="")
-    row.prop(ob, "end", text="")
+    row.prop(ob.keyframes, "beg", text="")
+    row.prop(ob.keyframes, "end", text="")
+    row.prop(ob.keyframes, "stp", text="")
 
 
 def anim_ind_tmpl(c, ob, cap):
@@ -242,8 +252,9 @@ def anim_ind_tmpl(c, ob, cap):
     col.prop(ob, "offrndseed", text="")
     row = c.row(align=True)
     row.enabled = ob.active
-    row.prop(ob, "beg", text="")
-    row.prop(ob, "stp", text="")
+    row.prop(ob.keyframes, "beg", text="")
+    row.prop(ob.keyframes, "end", text="")
+    row.prop(ob.keyframes, "stp", text="")
 
 
 def anim_fac_tmpl(c, ob):
@@ -255,6 +266,14 @@ def anim_fac_tmpl(c, ob):
     col.prop(ob, "fac", text="")
     row = c.row(align=True)
     row.enabled = ob.active
+    row.prop(ob, "delta_change", toggle=True)
+    row = c.row(align=True)
+    row.enabled = ob.active and ob.delta_change
+    row.prop(ob.keyframes, "beg", text="")
+    row.prop(ob.keyframes, "end", text="")
+    row.prop(ob.keyframes, "stp", text="")
+    row = c.row(align=True)
+    row.enabled = ob.active and not ob.delta_change
     col = row.column(align=True)
     col.prop(ob.mirror, "active", toggle=True)
     col = row.column(align=True)
@@ -316,51 +335,6 @@ class PTDBLNPOPC_PT_ui_setup(PTDBLNPOPC_PT_ui, bpy.types.Panel):
         col = bcol.column(align=True)
         row = col.row(align=True)
         row.prop(pool, "show_warn", toggle=True)
-
-
-class PTDBLNPOPC_PT_ui_curve(PTDBLNPOPC_PT_ui, bpy.types.Panel):
-    bl_label = "Curve"
-
-    def draw(self, context):
-        scene = context.scene
-        pool = scene.ptdblnpopc_pool
-        curve = pool.curve
-        layout = self.layout
-        layout.enabled = curveset_ok(pool) and not pool.animorph
-        edpans_ok = ed_panels_ok(pool)
-        box = layout.box()
-        bcol = box.column()
-        col = bcol.column(align=True)
-        col.enabled = edpans_ok
-        row = col.row(align=True)
-        c = row.column(align=True)
-        c.prop(curve, "spline", text="")
-        c = row.column(align=True)
-        c.enabled = pool.use_profile
-        c.prop(curve, "direction", text="")
-        col = bcol.column(align=True)
-        row = col.row(align=True)
-        c = row.column(align=True)
-        c.enabled = curve.spline != "POLY"
-        c.prop(curve, "ures", text="")
-        c = row.column(align=True)
-        c.prop(curve, "bevres", text="")
-        col = bcol.column(align=True)
-        row = col.row(align=True)
-        row.prop(curve, "smooth", text="")
-        row.prop(curve, "cyclic", toggle=True, text="cyclic")
-        row = col.row(align=True)
-        row.enabled = not curve.cyclic
-        c = row.column(align=True)
-        c.enabled = curve.spline == "NURBS"
-        c.prop(curve, "endpoints", toggle=True)
-        c = row.column(align=True)
-        c.prop(curve, "fillcaps", toggle=True)
-        col = bcol.column(align=True)
-        col.enabled = edpans_ok
-        row = col.row(align=True)
-        row.prop(curve, "bevdep", text="")
-        row.prop(curve, "pntrad", text="")
 
 
 class PTDBLNPOPC_PT_ui_path(PTDBLNPOPC_PT_ui, bpy.types.Panel):
@@ -940,6 +914,56 @@ class PTDBLNPOPC_PT_ui_profrot_anim(PTDBLNPOPC_PT_ui, bpy.types.Panel):
             c.label(text="none")
 
 
+class PTDBLNPOPC_PT_ui_curve(PTDBLNPOPC_PT_ui, bpy.types.Panel):
+    bl_label = "Curve"
+
+    def draw(self, context):
+        scene = context.scene
+        pool = scene.ptdblnpopc_pool
+        curve = pool.curve
+        layout = self.layout
+        layout.enabled = curveset_ok(pool) and not pool.animorph
+        edpans_ok = ed_panels_ok(pool)
+        box = layout.box()
+        bcol = box.column()
+        col = bcol.column(align=True)
+        col.enabled = edpans_ok
+        row = col.row(align=True)
+        c = row.column(align=True)
+        c.prop(curve, "spline", text="")
+        c = row.column(align=True)
+        c.enabled = pool.use_profile
+        c.prop(curve, "direction", text="")
+        col = bcol.column(align=True)
+        row = col.row(align=True)
+        c = row.column(align=True)
+        c.enabled = curve.spline != "POLY"
+        c.prop(curve, "ures", text="")
+        c = row.column(align=True)
+        c.prop(curve, "bevres", text="")
+        col = bcol.column(align=True)
+        row = col.row(align=True)
+        row.prop(curve, "smooth", text="")
+        row.prop(curve, "cyclic", toggle=True, text="cyclic")
+        row = col.row(align=True)
+        row.enabled = not curve.cyclic
+        c = row.column(align=True)
+        c.enabled = curve.spline == "NURBS"
+        c.prop(curve, "endpoints", toggle=True)
+        c = row.column(align=True)
+        c.prop(curve, "fillcaps", toggle=True)
+        col = bcol.column(align=True)
+        col.enabled = edpans_ok
+        row = col.row(align=True)
+        row.prop(curve, "bevdep", text="")
+        row.prop(curve, "pntrad", text="")
+        col = bcol.column(align=True)
+        col.enabled = edpans_ok and not curve.cyclic
+        row = col.row(align=True)
+        row.prop(curve, "cufac_beg", text="")
+        row.prop(curve, "cufac_end", text="")
+
+
 class PTDBLNPOPC_PT_ui_culoc(PTDBLNPOPC_PT_ui, bpy.types.Panel):
     bl_label = "Curve Locations"
 
@@ -1046,10 +1070,6 @@ class PTDBLNPOPC_PT_ui_curot_anim(PTDBLNPOPC_PT_ui, bpy.types.Panel):
 class PTDBLNPOPC_PT_ui_cudep(PTDBLNPOPC_PT_ui, bpy.types.Panel):
     bl_label = "Curve Bevel Depth"
 
-    @classmethod
-    def poll(cls, context):
-        return context.scene.ptdblnpopc_pool.use_profile
-
     def draw(self, context):
         pool = context.scene.ptdblnpopc_pool
         layout = self.layout
@@ -1084,8 +1104,84 @@ class PTDBLNPOPC_PT_ui_cudep_anim(PTDBLNPOPC_PT_ui, bpy.types.Panel):
         if pool.cudep:
             item = pool.cudep[pool.cudep_idx]
             c.enabled = item.active
-            anim_ind_tmpl(c, item.ani_nidx, "curve id")
-            anim_fac_tmpl(c, item.ani_fac)
+            if pool.use_profile:
+                anim_ind_tmpl(c, item.ani_nidx, "curve id")
+                anim_fac_tmpl(c, item.ani_fac)
+            else:
+                ob = item.ani_fac
+                row = c.row(align=True)
+                col = row.column(align=True)
+                col.prop(ob, "active", toggle=True)
+                col = row.column(align=True)
+                col.enabled = ob.active
+                col.prop(ob, "fac", text="")
+                row = c.row(align=True)
+                row.enabled = ob.active
+                col = row.column(align=True)
+                col.prop(ob.mirror, "active", toggle=True)
+                col = row.column(align=True)
+                col.enabled = ob.mirror.active
+                col.prop(ob.mirror, "cycles", text="")
+        else:
+            c.enabled = False
+            c.label(text="none")
+
+
+class PTDBLNPOPC_PT_ui_cufac(PTDBLNPOPC_PT_ui, bpy.types.Panel):
+    bl_label = "Curve Bevel Factor"
+
+    def draw(self, context):
+        pool = context.scene.ptdblnpopc_pool
+        layout = self.layout
+        layout.enabled = curveset_ok(pool) and ed_panels_ok(pool)
+        box = layout.box()
+        bcol = box.column()
+        cufac = pool.cufac
+        cufacidx = pool.cufac_idx
+        ops_on = bool(cufac)
+        coll_ops_tmpl(bcol, pool, "cufac", "cufac_idx", cufac, cufacidx, ops_on)
+        col = bcol.column(align=True)
+        if ops_on:
+            item = cufac[cufacidx]
+            col.enabled = item.active
+            row = col.row(align=True)
+            row.operator("ptdblnpopc.cufac_edit", text="Edit")
+        else:
+            col.enabled = False
+            col.label(text="no edits")
+
+
+class PTDBLNPOPC_PT_ui_cufac_anim(PTDBLNPOPC_PT_ui, bpy.types.Panel):
+    bl_label = "animation options"
+    bl_parent_id = "PTDBLNPOPC_PT_ui_cufac"
+
+    def draw(self, context):
+        pool = context.scene.ptdblnpopc_pool
+        layout = self.layout
+        layout.enabled = curveset_ok(pool) and ed_panels_ok(pool)
+        box = layout.box()
+        c = box.column(align=True)
+        if pool.cufac:
+            item = pool.cufac[pool.cufac_idx]
+            c.enabled = item.active
+            if pool.use_profile:
+                anim_ind_tmpl(c, item.ani_nidx, "curve id")
+                anim_fac_tmpl(c, item.ani_fac)
+            else:
+                ob = item.ani_fac
+                row = c.row(align=True)
+                col = row.column(align=True)
+                col.prop(ob, "active", toggle=True)
+                col = row.column(align=True)
+                col.enabled = ob.active
+                col.prop(ob, "fac", text="")
+                row = c.row(align=True)
+                row.enabled = ob.active
+                col = row.column(align=True)
+                col.prop(ob.mirror, "active", toggle=True)
+                col = row.column(align=True)
+                col.enabled = ob.mirror.active
+                col.prop(ob.mirror, "cycles", text="")
         else:
             c.enabled = False
             c.label(text="none")
@@ -1168,6 +1264,9 @@ class PTDBLNPOPC_PT_ui_noiz(PTDBLNPOPC_PT_ui, bpy.types.Panel):
         col = row.column(align=True)
         col.enabled = noiz.ani_noiz
         col.prop(noiz, "ani_seed", toggle=True)
+        row = c.row(align=True)
+        row.enabled = noiz.ani_noiz
+        row.prop(noiz, "ani_fac", text="")
         row = c.row(align=True)
         row.enabled = noiz.ani_noiz
         row.prop(noiz, "ani_blin", text="")
@@ -1433,6 +1532,7 @@ classes = (
     PTDBLNPOPC_UL_culoc,
     PTDBLNPOPC_UL_curot,
     PTDBLNPOPC_UL_cudep,
+    PTDBLNPOPC_UL_cufac,
     PTDBLNPOPC_UL_pnrad,
     PTDBLNPOPC_UL_trax,
     PTDBLNPOPC_PT_ui_setup,
@@ -1457,6 +1557,8 @@ classes = (
     PTDBLNPOPC_PT_ui_curot_anim,
     PTDBLNPOPC_PT_ui_cudep,
     PTDBLNPOPC_PT_ui_cudep_anim,
+    PTDBLNPOPC_PT_ui_cufac,
+    PTDBLNPOPC_PT_ui_cufac_anim,
     PTDBLNPOPC_PT_ui_pnrad,
     PTDBLNPOPC_PT_ui_pnrad_anim,
     PTDBLNPOPC_PT_ui_noiz,

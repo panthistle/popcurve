@@ -169,7 +169,6 @@ class PopEx:
 
     def _set_profile(self, dct):
         if dct:
-            #  [curve array]
             self._profile = getattr(ModPATH, dct["provider"].capitalize())(dct)
             self._proflocs = self._profile.get_locs()
             self._rpts = self._profile.npts
@@ -179,7 +178,6 @@ class PopEx:
             self._profed_rpivs = []
             self._profed_raxes = []
         else:
-            #  [single curve]
             self._profile = None
             self._rpts = 1
 
@@ -201,8 +199,13 @@ class PopEx:
             self._poprots = []
         else:
             self._direction = "path"
+            self._pathori = False
         self._cubevdep = dct["bevdep"]
         self._cubevdeplst = []
+        self._cufacbeg = dct["cufacbeg"]
+        self._cufacend = dct["cufacend"]
+        self._cubevfaclst = []
+        self._cufacitmlst = []
         self._cupntrad = dct["pntrad"]
         self._cupntradlst = []
         if self._direction == "prof":
@@ -402,6 +405,9 @@ class PopEx:
             )
 
     def _cudepth_get(self, vlst, val, nprams):
+        if self._ncus == 1:
+            vlst[0] = val
+            return vlst
         nids, nfvs = params_get(self._ncus, nprams)
         for i, f in zip(nids, nfvs):
             if f:
@@ -415,6 +421,25 @@ class PopEx:
             self._cubevdeplst.append(vlst)
             return
         self._cubevdeplst.append(self._cudepth_get(vlst, val, dct["nprams"]))
+
+    def _cufactor_get(self, vlst, val, nprams):
+        if self._ncus == 1:
+            vlst[0] = val
+            return vlst
+        nids, nfvs = params_get(self._ncus, nprams)
+        for i, f in zip(nids, nfvs):
+            if f:
+                vlst[i] = f * val
+        return vlst
+
+    def curve_factor(self, dct):
+        val = dct["fac"]
+        self._cufacitmlst.append(dct["affect"])
+        vlst = [0] * self._ncus
+        if not val:
+            self._cubevfaclst.append(vlst)
+            return
+        self._cubevfaclst.append(self._cufactor_get(vlst, val, dct["nprams"]))
 
     def _curadius_get(self, vlst, val, dct):
         if self._ncus == 1:
@@ -517,28 +542,41 @@ class PopEx:
                     rots = qls
                 if ols[1]:
                     afte_p.append([qls, p])
-        if self._pathori:
-            if rots:
-                attrots = self._path_attitude_update(locs)
-                rots = [q @ a for q, a in zip(rots, attrots)]
-            else:
-                rots = self._path_attitude_update(locs)
-            if befo_r:
-                rots = [q @ b for q, b in zip(rots, befo_r)]
-        elif befo_r:
-            if rots:
-                rots = [q @ b for q, b in zip(rots, befo_r)]
-            else:
-                rots = befo_r
+        if rots:
+            attrots = self._path_attitude_update(locs)
+            rots = [q @ a for q, a in zip(rots, attrots)]
+        else:
+            rots = self._path_attitude_update(locs)
+        if befo_r:
+            rots = [q @ b for q, b in zip(rots, befo_r)]
         if edlocs:
             locs = [loc + v for loc, v in zip(locs, edlocs)]
         for qls, p in afte_p:
             locs = [q @ (v - p) + p for q, v in zip(qls, locs)]
         return locs, rots
 
+    def _path_edrots_locs_noatt(self):
+        locs = self._pathlocs
+        for vls in self._pathedlocs:
+            locs = [loc + v for loc, v in zip(locs, vls)]
+        rots = []
+        for ols, qls, p in zip(
+            self._pathed_ropts, self._pathedrots, self._pathed_rpivs
+        ):
+            if ols[1]:
+                locs = [q @ (v - p) + p for q, v in zip(qls, locs)]
+            if rots:
+                rots = [q @ a for q, a in zip(qls, rots)]
+            else:
+                rots = qls
+        return locs, rots
+
     def compile_pop_data(self):
         locs, rots = self._prof_edrots_locs()
-        pa_l, pa_r = self._path_edrots_locs()
+        if not self._pathori:
+            pa_l, pa_r = self._path_edrots_locs_noatt()
+        else:
+            pa_l, pa_r = self._path_edrots_locs()
         if pa_r:
             locs = [[p + q @ v for v in vls] for p, q, vls in zip(pa_l, pa_r, locs)]
             if rots:
@@ -626,6 +664,19 @@ class PopEx:
                 dps = [max(0, a + b) for a, b in zip(dps, lst)]
         return dps
 
+    def get_bevfacs(self):
+        begs = [self._cufacbeg] * self._ncus
+        ends = [self._cufacend] * self._ncus
+        for lst, i in zip(self._cubevfaclst, self._cufacitmlst):
+            if i == "start":
+                begs = [min(max(0, a + b), 1) for a, b in zip(begs, lst)]
+            elif i == "end":
+                ends = [min(max(0, a + b), 1) for a, b in zip(ends, lst)]
+            else:
+                begs = [min(max(0, a + b), 1) for a, b in zip(begs, lst)]
+                ends = [min(max(0, a - b), 1) for a, b in zip(ends, lst)]
+        return begs, ends
+
     def get_pntrads(self):
         rds = [[self._cupntrad] * self._cpts for _ in range(self._ncus)]
         if len(self._cupntradlst) > 1:
@@ -651,6 +702,12 @@ class PopEx:
 
     def pathedloc_anim_data(self, dct, idx):
         locs = [Vector() for _ in range(self._rings)]
+        if dct["delta_change"]:
+            if dct["fac"]:
+                l_p = self._pathedlocs[idx]
+                l_d = self._pathedloc_get(locs, dct)
+                self._pathedlocs[idx] = [a + b for a, b in zip(l_p, l_d)]
+            return
         if not dct["fac"]:
             self._pathedlocs[idx] = locs
             return
@@ -661,7 +718,8 @@ class PopEx:
             rots = self._pathedrots[idx]
             axis = self._pathed_raxes[idx]
             if not use_facs:
-                self._pathedrots[idx] = [r @ Quaternion(axis, angle) for r in rots]
+                q = Quaternion(axis, angle)
+                self._pathedrots[idx] = [r @ q for r in rots]
                 return
             fls = self._pathedrot_get(dct["nprams"])
             if bang:
@@ -674,6 +732,14 @@ class PopEx:
 
     def profedloc_anim_data(self, dct, idx):
         locs = [[Vector() for _ in range(self._rpts)] for _ in range(self._rings)]
+        if dct["delta_change"]:
+            if dct["fac"]:
+                l_p = self._profedlocs[idx]
+                l_d = self._profedloc_get(locs, dct)
+                self._profedlocs[idx] = [
+                    [a + b for a, b in zip(lp, ld)] for lp, ld in zip(l_p, l_d)
+                ]
+            return
         if not dct["fac"]:
             self._profedlocs[idx] = locs
             return
@@ -691,9 +757,8 @@ class PopEx:
             rots = self._profedrots[idx]
             axis = self._profed_raxes[idx]
             if not use_facs:
-                self._profedrots[idx] = [
-                    [r @ Quaternion(axis, angle) for r in rls] for rls in rots
-                ]
+                q = Quaternion(axis, angle)
+                self._profedrots[idx] = [[r @ q for r in rls] for rls in rots]
                 return
             lst = self._profedrot_get(dct["nprams"], dct["iprams"])
             if bang:
@@ -709,6 +774,14 @@ class PopEx:
 
     def curvedloc_anim_data(self, dct, idx):
         locs = [[Vector() for _ in range(self._cpts)] for _ in range(self._ncus)]
+        if dct["delta_change"]:
+            if dct["fac"]:
+                l_p = self._curvedlocs[idx]
+                l_d = self._curvedloc_get(locs, dct)
+                self._curvedlocs[idx] = [
+                    [a + b for a, b in zip(lp, ld)] for lp, ld in zip(l_p, l_d)
+                ]
+            return
         if not dct["fac"]:
             self._curvedlocs[idx] = locs
             return
@@ -718,9 +791,8 @@ class PopEx:
         rots = self._curvedrots[idx]
         axis = self._curved_raxes[idx]
         if not use_facs:
-            self._curvedrots[idx] = [
-                [r @ Quaternion(axis, angle) for r in rls] for rls in rots
-            ]
+            q = Quaternion(axis, angle)
+            self._curvedrots[idx] = [[r @ q for r in rls] for rls in rots]
             return
         lst = self._curvedrot_get(dct["nprams"], dct["iprams"])
         if bang:
@@ -765,14 +837,44 @@ class PopEx:
 
     def cudepth_anim_data(self, dct, idx):
         vlst = [0] * self._ncus
+        val = dct["fac"]
+        if dct["delta_change"]:
+            if val:
+                l_p = self._cubevdeplst[idx]
+                l_d = self._cudepth_get(vlst, val, dct["nprams"])
+                self._cubevdeplst[idx] = [a + b for a, b in zip(l_p, l_d)]
+            return
         val = dct["fac"] - self._cubevdep
         if not val:
             self._cubevdeplst[idx] = vlst
             return
         self._cubevdeplst[idx] = self._cudepth_get(vlst, val, dct["nprams"])
 
+    def cufactor_anim_data(self, dct, idx):
+        vlst = [0] * self._ncus
+        val = dct["fac"]
+        if dct["delta_change"]:
+            if val:
+                l_p = self._cubevfaclst[idx]
+                l_d = self._cufactor_get(vlst, val, dct["nprams"])
+                self._cubevfaclst[idx] = [a + b for a, b in zip(l_p, l_d)]
+            return
+        if not val:
+            self._cubevfaclst[idx] = vlst
+            return
+        self._cubevfaclst[idx] = self._cufactor_get(vlst, val, dct["nprams"])
+
     def curadius_anim_data(self, dct, idx):
         vlst = [[0] * self._cpts for _ in range(self._ncus)]
+        val = dct["fac"]
+        if dct["delta_change"]:
+            if val:
+                l_p = self._cupntradlst[idx]
+                l_d = self._curadius_get(vlst, val, dct)
+                self._cupntradlst[idx] = [
+                    [a + b for a, b in zip(lp, ld)] for lp, ld in zip(l_p, l_d)
+                ]
+            return
         val = dct["fac"] - self._cupntrad
         if not val:
             self._cupntradlst[idx] = vlst

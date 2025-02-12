@@ -150,6 +150,8 @@ def update_associations(pool, dct):
             item.iprams.npts = cpts
         for item in pool.cudep:
             item.nprams.npts = ncus
+        for item in pool.cufac:
+            item.nprams.npts = ncus
         for item in pool.pnrad:
             item.nprams.npts = ncus
             item.iprams.npts = cpts
@@ -165,6 +167,12 @@ def pop_update(pop, pool):
     for item in pool.pathrot:
         if item.active:
             pop.path_edrotations(item.to_dct())
+    for item in pool.cudep:
+        if item.active:
+            pop.curve_depth(item.to_dct())
+    for item in pool.cufac:
+        if item.active:
+            pop.curve_factor(item.to_dct())
     for item in pool.pnrad:
         if item.active:
             pop.curve_radius(item.to_dct())
@@ -185,9 +193,6 @@ def pop_update(pop, pool):
         for item in pool.curot:
             if item.active:
                 pop.curv_edrotations(item.to_dct())
-        for item in pool.cudep:
-            if item.active:
-                pop.curve_depth(item.to_dct())
 
 
 def curves_update(pool, pop, oblst, sindz_on):
@@ -198,15 +203,20 @@ def curves_update(pool, pop, oblst, sindz_on):
         locs = noiz_locs(locs, noiz.vfac, noiz.ampli, noiz.nseed)
     rads = pop.get_pntrads()
     deps = pop.get_bevdeps()
+    begs, ends = pop.get_bevfacs()
     if sindz_on:
         ncus = pool.ncus
         sindz = pool.rngs.sindz_get()
         locs = [locs[i] for i in range(ncus) if i in sindz]
         rads = [rads[i] for i in range(ncus) if i in sindz]
         deps = [deps[i] for i in range(ncus) if i in sindz]
-    for ob, vls, rls, dv in zip(oblst, locs, rads, deps):
+        begs = [begs[i] for i in range(ncus) if i in sindz]
+        ends = [ends[i] for i in range(ncus) if i in sindz]
+    for ob, vls, rls, dv, beg, end in zip(oblst, locs, rads, deps, begs, ends):
         cu = ob.data
         cu.bevel_depth = dv
+        cu.bevel_factor_start = beg
+        cu.bevel_factor_end = end
         cl = cu.splines[0]
         for p, loc, rad in zip(cl.points, vls, rls):
             p.co = loc[:] + (1.0,)

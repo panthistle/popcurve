@@ -43,6 +43,18 @@ class PTDBLNPOPC_vec3(bpy.types.PropertyGroup):
     )
 
 
+class PTDBLNPOPC_keyframes(bpy.types.PropertyGroup):
+    beg: bpy.props.IntProperty(
+        name="start", description="start keyframe", default=1, min=1, options={"HIDDEN"}
+    )
+    end: bpy.props.IntProperty(
+        name="end", description="end keyframe", default=1, min=1, options={"HIDDEN"}
+    )
+    stp: bpy.props.IntProperty(
+        name="step", description="keyframe step", default=1, min=1, options={"HIDDEN"}
+    )
+
+
 class PTDBLNPOPC_anim_index(bpy.types.PropertyGroup):
     active: bpy.props.BoolProperty(
         name="index", description="animate index", default=False, options={"HIDDEN"}
@@ -62,17 +74,15 @@ class PTDBLNPOPC_anim_index(bpy.types.PropertyGroup):
         default=0,
         options={"HIDDEN"},
     )
-    beg: bpy.props.IntProperty(
-        name="start", description="start keyframe", default=1, min=1, options={"HIDDEN"}
-    )
-    stp: bpy.props.IntProperty(
-        name="step", description="keyframe step", default=1, min=1, options={"HIDDEN"}
-    )
+    keyframes: bpy.props.PointerProperty(type=PTDBLNPOPC_keyframes)
 
 
 class PTDBLNPOPC_anim_mirror(bpy.types.PropertyGroup):
     active: bpy.props.BoolProperty(
-        name="mirror", description="target mirror", default=False, options={"HIDDEN"}
+        name="mirror",
+        description="cycle between original and target values",
+        default=False,
+        options={"HIDDEN"},
     )
     cycles: bpy.props.IntProperty(
         name="repeat", description="mirror cycles", default=1, min=1, options={"HIDDEN"}
@@ -80,13 +90,35 @@ class PTDBLNPOPC_anim_mirror(bpy.types.PropertyGroup):
 
 
 class PTDBLNPOPC_anim_amount(bpy.types.PropertyGroup):
+    def anim_fac_get(self):
+        return self.get("fac", 0)
+
+    def anim_fac_set(self, value):
+        user = self.get("pname", "all")
+        if user == "cufac":
+            value = min(max(-1, value), 1)
+        self["fac"] = value
+
+    pname: bpy.props.StringProperty(default="all")
     active: bpy.props.BoolProperty(
         name="factor", description="animate factor", default=False, options={"HIDDEN"}
     )
     fac: bpy.props.FloatProperty(
-        name="target", description="factor", default=0, options={"HIDDEN"}
+        name="target",
+        description="factor",
+        default=0,
+        get=anim_fac_get,
+        set=anim_fac_set,
+        options={"HIDDEN"},
     )
     mirror: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_mirror)
+    delta_change: bpy.props.BoolProperty(
+        name="incremental",
+        description="use target as a delta value: added at every keyframe interval",
+        default=False,
+        options={"HIDDEN"},
+    )
+    keyframes: bpy.props.PointerProperty(type=PTDBLNPOPC_keyframes)
 
 
 class PTDBLNPOPC_anim_rots(bpy.types.PropertyGroup):
@@ -105,18 +137,13 @@ class PTDBLNPOPC_anim_rots(bpy.types.PropertyGroup):
         subtype="ANGLE",
         options={"HIDDEN"},
     )
-    beg: bpy.props.IntProperty(
-        name="start", description="from keyframe", default=1, min=1, options={"HIDDEN"}
-    )
-    end: bpy.props.IntProperty(
-        name="end", description="to keyframe", default=1, min=1, options={"HIDDEN"}
-    )
     lerp: bpy.props.BoolProperty(
         name="lerp",
         description="use interpolation factoring",
         default=False,
         options={"HIDDEN"},
     )
+    keyframes: bpy.props.PointerProperty(type=PTDBLNPOPC_keyframes)
 
 
 class PTDBLNPOPC_batchcoll_toggle(bpy.types.PropertyGroup):
@@ -331,6 +358,12 @@ class PTDBLNPOPC_noiz(bpy.types.PropertyGroup):
         name="noise",
         description="animate noise",
         default=False,
+        options={"HIDDEN"},
+    )
+    ani_fac: bpy.props.FloatProperty(
+        name="factor",
+        description="animation factor",
+        default=0.1,
         options={"HIDDEN"},
     )
     ani_seed: bpy.props.BoolProperty(
@@ -1404,6 +1437,24 @@ class PTDBLNPOPC_cudep(bpy.types.PropertyGroup):
         return d
 
 
+class PTDBLNPOPC_cufac(bpy.types.PropertyGroup):
+    name: bpy.props.StringProperty(default="Factor")
+    active: bpy.props.BoolProperty(default=False)
+    affect: bpy.props.StringProperty(default="both")
+    fac: bpy.props.FloatProperty(default=1)
+    nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
+    ani_nidx: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_index)
+    ani_fac: bpy.props.PointerProperty(type=PTDBLNPOPC_anim_amount)
+
+    def anim_state(self, dummy=False):
+        return self.ani_nidx.active or self.ani_fac.active
+
+    def to_dct(self):
+        d = {"affect": self.affect, "fac": self.fac}
+        d["nprams"] = self.nprams.to_dct()
+        return d
+
+
 class PTDBLNPOPC_pnrad(bpy.types.PropertyGroup):
     name: bpy.props.StringProperty(default="Radius")
     active: bpy.props.BoolProperty(default=False)
@@ -1703,6 +1754,11 @@ class PTDBLNPOPC_curve(bpy.types.PropertyGroup):
         if pool.update_ok:
             bpy.ops.ptdblnpopc.curve_setts(caller="bevdep")
 
+    def curve_bevfac_update(self, context):
+        pool = context.scene.ptdblnpopc_pool
+        if pool.update_ok:
+            bpy.ops.ptdblnpopc.curve_setts(caller="bevfac")
+
     def curve_pntrad_update(self, context):
         pool = context.scene.ptdblnpopc_pool
         if pool.update_ok:
@@ -1710,15 +1766,33 @@ class PTDBLNPOPC_curve(bpy.types.PropertyGroup):
 
     bevdep: bpy.props.FloatProperty(
         name="bevel depth",
-        description="bevel depth start value",
+        description="bevel depth value",
         default=0.25,
         min=0,
         update=curve_bevdep_update,
         options={"HIDDEN"},
     )
+    cufac_beg: bpy.props.FloatProperty(
+        name="factor start",
+        description="bevel factor start value",
+        default=0,
+        min=0,
+        max=1,
+        update=curve_bevfac_update,
+        options={"HIDDEN"},
+    )
+    cufac_end: bpy.props.FloatProperty(
+        name="factor end",
+        description="bevel factor end value",
+        default=1,
+        min=0,
+        max=1,
+        update=curve_bevfac_update,
+        options={"HIDDEN"},
+    )
     pntrad: bpy.props.FloatProperty(
         name="point radius",
-        description="spline point radius start value",
+        description="spline point radius value",
         default=1.0,
         min=0,
         update=curve_pntrad_update,
@@ -1835,8 +1909,11 @@ class PTDBLNPOPC_pool(bpy.types.PropertyGroup):
     cudep_idx: bpy.props.IntProperty(name="Depth", default=-1, options={"HIDDEN"})
     pnrad: bpy.props.CollectionProperty(type=PTDBLNPOPC_pnrad)
     pnrad_idx: bpy.props.IntProperty(name="Radius", default=-1, options={"HIDDEN"})
+    cufac: bpy.props.CollectionProperty(type=PTDBLNPOPC_cufac)
+    cufac_idx: bpy.props.IntProperty(name="Factor", default=-1, options={"HIDDEN"})
     trax: bpy.props.CollectionProperty(type=PTDBLNPOPC_track)
     trax_idx: bpy.props.IntProperty(name="Track", default=-1, options={"HIDDEN"})
+
     SPLINE_TYPES = {"POLY", "NURBS"}
     batchtoggle_ops: bpy.props.PointerProperty(type=PTDBLNPOPC_batchcoll_toggle)
     batchupdate_ops: bpy.props.PointerProperty(type=PTDBLNPOPC_batchcoll_update)
@@ -1943,10 +2020,15 @@ class PTDBLNPOPC_pool(bpy.types.PropertyGroup):
         return False
 
     def deps_anim_state_eval(self):
-        if self.use_profile:
-            for item in self.cudep:
-                if item.active and item.anim_state():
-                    return True
+        for item in self.cudep:
+            if item.active and item.anim_state():
+                return True
+        return False
+
+    def facs_anim_state_eval(self):
+        for item in self.cufac:
+            if item.active and item.anim_state():
+                return True
         return False
 
     def rads_anim_state_eval(self):
@@ -1966,6 +2048,8 @@ class PTDBLNPOPC_pool(bpy.types.PropertyGroup):
             "direction": self.curve.direction,
             "pntrad": self.curve.pntrad,
             "bevdep": self.curve.bevdep,
+            "cufacbeg": self.curve.cufac_beg,
+            "cufacend": self.curve.cufac_end,
         }
 
     def props_unset(self):
@@ -2867,7 +2951,10 @@ class PTDBLNPOPC_OT_cudep_edit(bpy.types.Operator):
     bl_description = "curve bevel depth"
     bl_options = {"REGISTER", "INTERNAL", "UNDO"}
 
-    fac: bpy.props.FloatProperty(name="factor", description="bevel depth", default=0.25)
+    use_profile: bpy.props.BoolProperty(default=False)
+    fac: bpy.props.FloatProperty(
+        name="factor", description="bevel depth", default=0.25, min=0
+    )
     nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
 
     def copy_from_pg(self, item):
@@ -2883,8 +2970,10 @@ class PTDBLNPOPC_OT_cudep_edit(bpy.types.Operator):
     def invoke(self, context, event):
         pool = context.scene.ptdblnpopc_pool
         item = pool.cudep[pool.cudep_idx]
+        self.use_profile = pool.use_profile
         self.fac = item.fac
-        self.copy_from_pg(item)
+        if self.use_profile:
+            self.copy_from_pg(item)
         return self.execute(context)
 
     def execute(self, context):
@@ -2893,7 +2982,8 @@ class PTDBLNPOPC_OT_cudep_edit(bpy.types.Operator):
         pool.update_ok = False
         item = pool.cudep[pool.cudep_idx]
         item.fac = self.fac
-        self.copy_to_pg(item)
+        if self.use_profile:
+            self.copy_to_pg(item)
         try:
             ModPOPC.scene_update(scene)
         except Exception as my_err:
@@ -2906,8 +2996,9 @@ class PTDBLNPOPC_OT_cudep_edit(bpy.types.Operator):
 
     def draw(self, context):
         layout = self.layout
-        box = layout.box()
-        ModPDOP.params_layout_draw(box, self.nprams, ("Curves", "Groups"), False)
+        if self.use_profile:
+            box = layout.box()
+            ModPDOP.params_layout_draw(box, self.nprams, ("Curves", "Groups"), False)
         box = layout.box()
         row = box.row(align=True)
         s = row.split(factor=0.25)
@@ -2915,6 +3006,90 @@ class PTDBLNPOPC_OT_cudep_edit(bpy.types.Operator):
         row = sc.row(align=True)
         row.label(text="Factor")
         sc = s.column(align=True)
+        row = sc.row(align=True)
+        row.prop(self, "fac", text="")
+
+
+# ---- CURVE BEVEL FACTOR COLLECTION ITEM EDITOR
+
+
+class PTDBLNPOPC_OT_cufac_edit(bpy.types.Operator):
+    bl_label = "Curve Bevel Factor"
+    bl_idname = "ptdblnpopc.cufac_edit"
+    bl_description = "curve bevel factor"
+    bl_options = {"REGISTER", "INTERNAL", "UNDO"}
+
+    use_profile: bpy.props.BoolProperty(default=False)
+    affect: bpy.props.EnumProperty(
+        name="influence",
+        description="which end to influence",
+        items=(
+            ("start", "start", "start factor"),
+            ("end", "end", "end factor"),
+            ("both", "both", "both factors: grow/shrink"),
+        ),
+        default="both",
+    )
+    fac: bpy.props.FloatProperty(
+        name="factor", description="offset", default=0, min=-1, max=1
+    )
+    nprams: bpy.props.PointerProperty(type=PTDBLNPOPC_params)
+
+    def copy_from_pg(self, item):
+        d = item.nprams.to_dct()
+        for key in d.keys():
+            setattr(self.nprams, key, d[key])
+
+    def copy_to_pg(self, item):
+        d = self.nprams.to_dct()
+        for key in d.keys():
+            setattr(item.nprams, key, d[key])
+
+    def invoke(self, context, event):
+        pool = context.scene.ptdblnpopc_pool
+        item = pool.cufac[pool.cufac_idx]
+        self.use_profile = pool.use_profile
+        self.affect = item.affect
+        self.fac = item.fac
+        if self.use_profile:
+            self.copy_from_pg(item)
+        return self.execute(context)
+
+    def execute(self, context):
+        scene = context.scene
+        pool = scene.ptdblnpopc_pool
+        pool.update_ok = False
+        item = pool.cufac[pool.cufac_idx]
+        item.affect = self.affect
+        item.fac = self.fac
+        if self.use_profile:
+            self.copy_to_pg(item)
+        try:
+            ModPOPC.scene_update(scene)
+        except Exception as my_err:
+            pool.update_ok = True
+            print(f"cufac_edit: {my_err.args}")
+            self.report({"INFO"}, f"{my_err.args}")
+            return {"CANCELLED"}
+        pool.update_ok = True
+        return {"FINISHED"}
+
+    def draw(self, context):
+        layout = self.layout
+        if self.use_profile:
+            box = layout.box()
+            ModPDOP.params_layout_draw(box, self.nprams, ("Curves", "Groups"), False)
+        box = layout.box()
+        row = box.row(align=True)
+        s = row.split(factor=0.25)
+        sc = s.column(align=True)
+        names = ("Influence", "Factor")
+        for n in names:
+            row = sc.row()
+            row.label(text=n)
+        sc = s.column(align=True)
+        row = sc.row(align=True)
+        row.prop(self, "affect", text="")
         row = sc.row(align=True)
         row.prop(self, "fac", text="")
 
@@ -2929,7 +3104,9 @@ class PTDBLNPOPC_OT_pnrad_edit(bpy.types.Operator):
     bl_options = {"REGISTER", "INTERNAL", "UNDO"}
 
     use_profile: bpy.props.BoolProperty(default=False)
-    fac: bpy.props.FloatProperty(name="factor", description="point radius", default=1.0)
+    fac: bpy.props.FloatProperty(
+        name="factor", description="point radius", default=1.0, min=0
+    )
     selview: bpy.props.EnumProperty(
         name="options",
         description="view options",
@@ -3021,6 +3198,7 @@ class PTDBLNPOPC_OT_pnrad_edit(bpy.types.Operator):
 
 classes = (
     PTDBLNPOPC_vec3,
+    PTDBLNPOPC_keyframes,
     PTDBLNPOPC_anim_index,
     PTDBLNPOPC_anim_mirror,
     PTDBLNPOPC_anim_amount,
@@ -3041,6 +3219,7 @@ classes = (
     PTDBLNPOPC_culoc,
     PTDBLNPOPC_curot,
     PTDBLNPOPC_cudep,
+    PTDBLNPOPC_cufac,
     PTDBLNPOPC_pnrad,
     PTDBLNPOPC_noiz,
     PTDBLNPOPC_rngs,
@@ -3059,6 +3238,7 @@ classes = (
     PTDBLNPOPC_OT_culoc_edit,
     PTDBLNPOPC_OT_curot_edit,
     PTDBLNPOPC_OT_cudep_edit,
+    PTDBLNPOPC_OT_cufac_edit,
     PTDBLNPOPC_OT_pnrad_edit,
 )
 

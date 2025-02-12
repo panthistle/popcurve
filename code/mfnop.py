@@ -90,6 +90,7 @@ file_excluded_attributes = {
     "culoc_idx",
     "curot_idx",
     "cudep_idx",
+    "cufac_idx",
     "pnrad_idx",
     "trax",
     "trax_idx",
@@ -365,71 +366,110 @@ def aniact_prof_edit_dict(prof, loop):
     return d
 
 
-def aniact_index_offset_list(inst, idx, loop):
-    def anim_ids(base, inc, beg, stp, loop):
-        beg = min(loop, beg)
-        ids = [base] * beg
-        if loop > beg:
-            d = loop - beg
+def aniact_idx_list(inst, idx, loop):
+    def anim_ids_seq(base, inc, beg, stp, end):
+        beg = min(end, beg)
+        vals = [base] * beg
+        if end > beg:
+            d = end - beg
             base += inc
             ct = 0
             for i in range(d):
-                ids.append(base)
+                vals.append(base)
                 ct += 1
                 if ct == stp:
                     base += inc
                     ct = 0
-        return ids
+        return vals
 
-    def anim_ids_rnd(base, inc, beg, stp, rndseed, loop):
-        beg = min(loop, beg)
-        ids = [base] * beg
-        if loop > beg:
-            d = loop - beg
+    def anim_ids_rnd(base, inc, beg, stp, rndseed, end):
+        beg = min(end, beg)
+        vals = [base] * beg
+        if end > beg:
+            d = end - beg
             seed(rndseed)
-            val = randint(base - inc, base + inc)
+            v = randint(base - inc, base + inc)
             ct = 0
             for i in range(d - 1):
-                ids.append(val)
+                vals.append(v)
                 ct += 1
                 if ct == stp:
-                    val = randint(base - inc, base + inc)
+                    v = randint(base - inc, base + inc)
                     ct = 0
-            ids.append(base)
-        return ids
+            vals.append(base)
+        return vals
 
     offset = inst.offset
     if not (inst.active and offset):
         return [idx] * loop
+    beg = inst.keyframes.beg
+    end = inst.keyframes.end
+    stp = inst.keyframes.stp
+    if beg < end < loop:
+        if inst.offrnd:
+            ids = anim_ids_rnd(idx, offset, beg, stp, inst.offrndseed, end)
+            d = loop - end
+            ids.extend([ids[-1]] * d)
+            return ids
+        ids = anim_ids_seq(idx, offset, beg, stp, end)
+        d = loop - end
+        ids.extend([ids[-1]] * d)
+        return ids
     if inst.offrnd:
-        return anim_ids_rnd(idx, offset, inst.beg, inst.stp, inst.offrndseed, loop)
-    return anim_ids(idx, offset, inst.beg, inst.stp, loop)
+        return anim_ids_rnd(idx, offset, beg, stp, inst.offrndseed, loop)
+    return anim_ids_seq(idx, offset, beg, stp, loop)
+
+
+def aniact_valstep_list(val, beg, end, stp, default=0):
+    beg = min(end, beg)
+    vals = [default] * beg
+    if end > beg:
+        d = end - beg
+        base = val
+        ct = 0
+        for i in range(d):
+            vals.append(base)
+            base = default
+            ct += 1
+            if ct == stp:
+                base = val
+                ct = 0
+    return vals
 
 
 def aniact_collval_list(inst, loop):
     v1 = inst.fac
-    v2 = inst.ani_fac.fac
-    if not inst.ani_fac.active or (v1 == v2):
+    anifac = inst.ani_fac
+    v2 = anifac.fac
+    if anifac.delta_change:
+        if not (anifac.active and v2):
+            return [0] * loop
+        beg = anifac.keyframes.beg
+        end = anifac.keyframes.end
+        stp = anifac.keyframes.stp
+        if beg < end < loop:
+            vals = aniact_valstep_list(v2, beg, end, stp)
+            d = loop - end
+            vals.extend([0] * d)
+            return vals
+        return aniact_valstep_list(v2, beg, loop, stp)
+    if not anifac.active or (v1 == v2):
         return [v1] * loop
-    lst = aniact_fac_list(inst.ani_fac.mirror.active, inst.ani_fac.mirror.cycles, loop)
+    lst = aniact_fac_list(anifac.mirror.active, anifac.mirror.cycles, loop)
     diff = v2 - v1
     return [v1 + diff * i for i in lst]
 
 
-def aniact_edvals_dict_onedim(coll, loop, fake_ids):
+def aniact_edvals_dict_onedim(coll, loop):
     d = {"dcts": [], "nids": [], "ams": [], "lids": []}
-    if fake_ids:
-        d["ids"] = []
     tmpid = 0
     for item in coll:
         if item.active:
             if item.anim_state(False):
-                d["dcts"].append(item.to_dct())
-                d["nids"].append(
-                    aniact_index_offset_list(item.ani_nidx, item.nprams.idx, loop)
-                )
-                if fake_ids:
-                    d["ids"].append([0] * loop)
+                dct = item.to_dct()
+                dct["delta_change"] = item.ani_fac.delta_change
+                d["dcts"].append(dct)
+                d["nids"].append(aniact_idx_list(item.ani_nidx, item.nprams.idx, loop))
                 d["ams"].append(aniact_collval_list(item, loop))
                 d["lids"].append(tmpid)
             tmpid += 1
@@ -442,13 +482,11 @@ def aniact_edvals_dict_twodim(coll, loop):
     for item in coll:
         if item.active:
             if item.anim_state(True):
-                d["dcts"].append(item.to_dct())
-                d["ids"].append(
-                    aniact_index_offset_list(item.ani_idx, item.iprams.idx, loop)
-                )
-                d["nids"].append(
-                    aniact_index_offset_list(item.ani_nidx, item.nprams.idx, loop)
-                )
+                dct = item.to_dct()
+                dct["delta_change"] = item.ani_fac.delta_change
+                d["dcts"].append(dct)
+                d["ids"].append(aniact_idx_list(item.ani_idx, item.iprams.idx, loop))
+                d["nids"].append(aniact_idx_list(item.ani_nidx, item.nprams.idx, loop))
                 d["ams"].append(aniact_collval_list(item, loop))
                 d["lids"].append(tmpid)
             tmpid += 1
@@ -472,12 +510,8 @@ def aniact_blendvals_dict(coll, loop):
         if item.active:
             if item.anim_state():
                 d["dcts"].append(item.to_dct())
-                d["ids"].append(
-                    aniact_index_offset_list(item.ani_idx, item.iprams.idx, loop)
-                )
-                d["nids"].append(
-                    aniact_index_offset_list(item.ani_nidx, item.nprams.idx, loop)
-                )
+                d["ids"].append(aniact_idx_list(item.ani_idx, item.iprams.idx, loop))
+                d["nids"].append(aniact_idx_list(item.ani_nidx, item.nprams.idx, loop))
                 d["ams"].append(aniact_blndval_list(item, loop))
                 d["lids"].append(tmpid)
             tmpid += 1
@@ -488,13 +522,15 @@ def aniact_collang_list(inst, loop):
     angle = inst.ani_rot.angle
     if not (inst.ani_rot.ani_ang and angle):
         return [0] * loop
-    f1 = inst.ani_rot.beg
-    f2 = inst.ani_rot.end
-    angs = [0 if f1 > i else angle for i in range(loop)]
-    if f2 > f1 and f2 < loop:
-        d = loop - f2
-        angs[f2:] = [0] * d
-    return angs
+    beg = inst.ani_rot.keyframes.beg
+    end = inst.ani_rot.keyframes.end
+    stp = inst.ani_rot.keyframes.stp
+    if beg < end < loop:
+        angs = aniact_valstep_list(angle, beg, end, stp)
+        d = loop - end
+        angs.extend([0] * d)
+        return angs
+    return aniact_valstep_list(angle, beg, loop, stp)
 
 
 def aniact_edrots_dict_onedim(coll, loop):
@@ -507,17 +543,22 @@ def aniact_edrots_dict_onedim(coll, loop):
                 d["b_angs"].append(item.ani_rot.ani_ang)
                 d["angs"].append(aniact_collang_list(item, loop))
                 d["use_facs"].append(item.ani_rot.lerp)
-                d["nids"].append(
-                    aniact_index_offset_list(item.ani_nidx, item.nprams.idx, loop)
-                )
+                d["nids"].append(aniact_idx_list(item.ani_nidx, item.nprams.idx, loop))
                 d["lids"].append(tmpid)
             tmpid += 1
     return d
 
 
 def aniact_edrots_dict_twodim(coll, loop):
-    d = {"dcts": [], "b_angs": [], "angs": [], "use_facs": []}
-    d.update({"ids": [], "nids": [], "lids": []})
+    d = {
+        "dcts": [],
+        "b_angs": [],
+        "angs": [],
+        "use_facs": [],
+        "ids": [],
+        "nids": [],
+        "lids": [],
+    }
     tmpid = 0
     for item in coll:
         if item.active:
@@ -526,49 +567,52 @@ def aniact_edrots_dict_twodim(coll, loop):
                 d["b_angs"].append(item.ani_rot.ani_ang)
                 d["angs"].append(aniact_collang_list(item, loop))
                 d["use_facs"].append(item.ani_rot.lerp)
-                d["ids"].append(
-                    aniact_index_offset_list(item.ani_idx, item.iprams.idx, loop)
-                )
-                d["nids"].append(
-                    aniact_index_offset_list(item.ani_nidx, item.nprams.idx, loop)
-                )
+                d["ids"].append(aniact_idx_list(item.ani_idx, item.iprams.idx, loop))
+                d["nids"].append(aniact_idx_list(item.ani_nidx, item.nprams.idx, loop))
                 d["lids"].append(tmpid)
             tmpid += 1
     return d
 
 
 def aniact_noiz_list(noiz, loop):
-    def bln_val_list(amp, beg, end, stp, loop):
+    def bln_val_list(a, b, beg, end, stp, loop):
         beg = 0 if beg < 2 else beg
-        end = 0 if end < 2 else end
+        diff = b - a
+        v = a
+        m = 1
         vals = []
         if beg > 0:
             beg = min(loop, beg)
-            v = amp / (beg - 1)
-            vals += [v * i for i in range(beg)]
-        rng = loop - beg
-        if rng > 0:
-            end = min(rng, end)
+            v = diff / beg
+            vals += [a + v * i for i in range(beg)]
+            v = b
+            m = -1
+        if loop > beg:
+            rng = loop - beg
+            end = 0 if end < 2 else min(rng, end)
             if rng > end:
                 rng -= end
-                v = amp
+                vinc = m * diff / stp
                 ct = 0
                 for i in range(rng):
                     vals.append(v)
+                    v += vinc
                     ct += 1
                     if ct == stp:
-                        v = 0 if v == amp else amp
+                        vinc *= -1
                         ct = 0
             if end > 0:
                 v2 = vals[-1]
-                v = -v2 / end
-                vals += [v2 + v * i for i in range(1, end)] + [0]
+                v = (a - v2) / end
+                vals += [v2 + v * i for i in range(1, end)] + [a]
         return vals
 
-    amp = noiz.ampli
-    if not (noiz.ani_noiz and amp):
-        return [amp] * loop
-    return bln_val_list(amp, noiz.ani_blin, noiz.ani_blout, noiz.ani_stp, loop)
+    a = noiz.ampli
+    b = noiz.ani_fac
+    diff = a - b
+    if not (noiz.ani_noiz and diff):
+        return [a] * loop
+    return bln_val_list(a, b, noiz.ani_blin, noiz.ani_blout, noiz.ani_stp, loop)
 
 
 def aniact_fc_create(action, dp, di, fls, vls, kls, loop):
