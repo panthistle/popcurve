@@ -1,7 +1,7 @@
-### About
+### PopCurve v1.8
 
 Curves generator/animator add-on for Blender. Developed and tested on Blender 3.6 LTS and 4.2 LTS.  
-Latest update: 28-Jan-2025  
+Latest update: 12-Feb-2025  
 
 
 ### Download and Install
@@ -21,4 +21,3 @@ To install the add-on in Blender:
 
 The best way to find out what the add-on can do for you is to experiment with it. There are several sample files to  
 get you started and tooltips if you hover you mouse over any of the command buttons in the user interface.  
-For an introduction, watch the [Demo Video](https://www.youtube.com/watch?v=5YuJ9eQYwVE) 
