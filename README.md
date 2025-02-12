@@ -19,5 +19,7 @@ To install the add-on in Blender:
 
 ### Usage
 
-The best way to find out what the add-on can do for you is to experiment with it. There are several sample files to  
-get you started and tooltips if you hover you mouse over any of the command buttons in the user interface.  
+The best way to find out what the add-on does is to experiment with it. There are several sample files inside the  
+'sample_settings' directory which you can download and open in Blender once you have installed PopCurve. These are  
+examples to help get you started. You can also create your own sample files to save favourite settings for later use.  
+In addition, there are descriptive tooltips for all the command buttons in the user interface.  
